@@ -2,1902 +2,4984 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#073b2a">
-<meta name="description" content="منصة تعليمية عن التغيرات المناخية ومؤتمر COP27 في مصر عام 2022">
-<title>التغيرات المناخية | منصة تعليمية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>التغيرات المناخية | مصر و COP27</title>
+
+<meta name="description"
+content="منصة تعليمية تفاعلية عن التغيرات المناخية ومؤتمر COP27 في شرم الشيخ">
+
+<!-- Three.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
 
 <style>
-/* =====================================================
-   RESET + SPEED
-===================================================== */
+
+/* =========================================================
+   RESET
+========================================================= */
+
 *{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 html{
-  scroll-behavior:smooth;
+    scroll-behavior:smooth;
 }
 
 body{
-  font-family:Tahoma,Arial,sans-serif;
-  background:#f7f8f5;
-  color:#17241f;
-  line-height:1.9;
-  overflow-x:hidden;
+    font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
+
+    background:
+    linear-gradient(
+        135deg,
+        #f4fbf8,
+        #ffffff 45%,
+        #eef8f4
+    );
+
+    color:#173c32;
+    overflow-x:hidden;
 }
 
+button,
 a{
-  color:inherit;
-  text-decoration:none;
+    font-family:inherit;
 }
 
 button{
-  font-family:inherit;
+    cursor:pointer;
 }
 
-img{
-  max-width:100%;
-  display:block;
-}
 
-.container{
-  width:min(1120px,92%);
-  margin:auto;
-}
+/* =========================================================
+   VARIABLES
+========================================================= */
 
-/* =====================================================
-   COLORS
-===================================================== */
 :root{
-  --green:#073b2a;
-  --green2:#0b513b;
-  --gold:#c49a42;
-  --gold2:#e1bf6a;
-  --cream:#f7f4ea;
-  --white:#fff;
-  --text:#17241f;
-  --muted:#65716c;
-  --border:#e5e0d2;
-  --shadow:0 8px 25px rgba(0,0,0,.07);
+
+    --green:#087b58;
+    --green-dark:#04543e;
+    --green-light:#dff5eb;
+
+    --gold:#c89b3c;
+    --gold-light:#f7e6ae;
+
+    --white:#ffffff;
+
+    --text:#173c32;
+    --muted:#6b7b75;
+
+    --shadow:
+        0 15px 45px rgba(0,70,50,.10);
+
+    --shadow-big:
+        0 25px 70px rgba(0,70,50,.16);
+
+    --radius:28px;
 }
 
-/* =====================================================
-   NAVBAR
-===================================================== */
-.navbar{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  background:rgba(7,59,42,.98);
-  border-bottom:1px solid rgba(225,191,106,.25);
+
+/* =========================================================
+   BACKGROUND EFFECTS
+========================================================= */
+
+.bg-orb{
+    position:fixed;
+    width:400px;
+    height:400px;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.12;
+    z-index:-2;
+    pointer-events:none;
 }
 
-.nav-inner{
-  min-height:66px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
+.bg-orb.one{
+    background:#16a77b;
+    top:-150px;
+    right:-100px;
 }
 
-.logo-text{
-  color:#fff;
-  font-size:18px;
-  font-weight:bold;
-  white-space:nowrap;
+.bg-orb.two{
+    background:#e0ad43;
+    bottom:-180px;
+    left:-100px;
 }
 
-.logo-text span{
-  color:var(--gold2);
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    background:
+    rgba(255,255,255,.90);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+    1px solid rgba(8,123,88,.12);
+
+    box-shadow:
+    0 8px 35px rgba(0,0,0,.06);
 }
 
-.menu{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  overflow-x:auto;
-  scrollbar-width:none;
-}
 
-.menu::-webkit-scrollbar{
-  display:none;
-}
-
-.menu a{
-  color:#e9eee9;
-  padding:9px 11px;
-  border-radius:7px;
-  font-size:13px;
-  white-space:nowrap;
-}
-
-.menu a:hover,
-.menu a.active{
-  background:rgba(225,191,106,.14);
-  color:var(--gold2);
-}
-
-.menu-btn{
-  display:none;
-  border:0;
-  background:none;
-  color:#fff;
-  font-size:25px;
-  cursor:pointer;
-}
-
-/* =====================================================
+/* =========================================================
    OFFICIAL HEADER
-===================================================== */
+========================================================= */
+
 .official{
-  background:#fff;
-  border-bottom:1px solid var(--border);
-  padding:24px 0;
+    background:
+    linear-gradient(
+        100deg,
+        #064f3c,
+        #087b58,
+        #0b916a
+    );
+
+    color:#fff;
 }
 
 .official-inner{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:35px;
-  text-align:center;
+    width:min(1250px,94%);
+    margin:auto;
+
+    min-height:125px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:25px;
 }
 
-.official-logo{
-  width:85px;
-  height:85px;
-  object-fit:contain;
+.logo{
+    width:135px;
+    height:135px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+
+    filter:
+    drop-shadow(0 7px 12px rgba(0,0,0,.22));
 }
 
-.official-title{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
+.official-text{
+    text-align:center;
+    flex:1;
+
+    display:flex;
+    flex-direction:column;
+    gap:4px;
 }
 
-.official-title span{
-  font-size:14px;
-  color:#58635e;
+.official-text span{
+    font-size:16px;
 }
 
-.official-title strong{
-  font-size:18px;
-  color:var(--green);
+.official-text strong{
+    font-size:25px;
 }
 
-.official-title .school{
-  font-size:14px;
-  color:var(--gold);
+.official-text .school{
+    font-size:17px;
+    color:#f8e8b1;
 }
 
-/* =====================================================
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    width:min(1250px,94%);
+    margin:auto;
+
+    min-height:65px;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.menu{
+    display:flex;
+    align-items:center;
+
+    gap:7px;
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+
+    flex:1;
+}
+
+.menu::-webkit-scrollbar{
+    display:none;
+}
+
+.menu button{
+    border:none;
+
+    background:#f1f7f4;
+
+    color:#31574c;
+
+    padding:11px 15px;
+
+    border-radius:50px;
+
+    white-space:nowrap;
+
+    font-size:13px;
+
+    transition:.25s;
+}
+
+.menu button:hover{
+    background:#dff4eb;
+    transform:translateY(-2px);
+}
+
+.menu button.active{
+    background:
+    linear-gradient(
+        135deg,
+        var(--green),
+        #0b986d
+    );
+
+    color:white;
+
+    box-shadow:
+    0 8px 20px rgba(8,123,88,.22);
+}
+
+.mobile-menu{
+    display:none;
+
+    border:none;
+
+    background:var(--green);
+
+    color:white;
+
+    width:45px;
+    height:45px;
+
+    border-radius:14px;
+
+    font-size:22px;
+}
+
+
+/* =========================================================
+   PAGES SYSTEM
+========================================================= */
+
+.page{
+    display:none;
+
+    min-height:
+    calc(100vh - 190px);
+
+    padding:
+    45px 0 100px;
+
+    animation:
+    pageIn .45s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes pageIn{
+
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container{
+    width:min(1180px,92%);
+    margin:auto;
+}
+
+
+/* =========================================================
    HERO
-===================================================== */
+========================================================= */
+
 .hero{
-  background:
-    linear-gradient(135deg,#073b2a 0%,#0a4c37 60%,#063223 100%);
-  color:#fff;
-  padding:70px 0 80px;
-  position:relative;
-  overflow:hidden;
+    min-height:
+    calc(100vh - 200px);
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    align-items:center;
+
+    gap:45px;
 }
 
-.hero:after{
-  content:"";
-  position:absolute;
-  width:300px;
-  height:300px;
-  border:1px solid rgba(225,191,106,.15);
-  border-radius:50%;
-  left:-130px;
-  bottom:-150px;
+.hero-content{
+    animation:
+    heroText .7s ease;
 }
 
-.hero-grid{
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:55px;
-  align-items:center;
+@keyframes heroText{
+    from{
+        opacity:0;
+        transform:translateX(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
 }
 
 .badge{
-  display:inline-block;
-  color:var(--gold2);
-  border:1px solid rgba(225,191,106,.45);
-  padding:6px 14px;
-  border-radius:30px;
-  font-size:12px;
-  margin-bottom:18px;
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:
+    #e3f6ee;
+
+    color:
+    var(--green);
+
+    padding:
+    9px 17px;
+
+    border-radius:50px;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    margin-bottom:18px;
 }
 
 .hero h1{
-  font-size:clamp(42px,7vw,76px);
-  line-height:1.15;
-  margin-bottom:18px;
-  letter-spacing:-2px;
+    font-size:
+    clamp(40px,6vw,78px);
+
+    line-height:1.1;
+
+    color:
+    var(--green-dark);
+
+    margin-bottom:20px;
+
+    font-weight:900;
 }
 
 .hero h1 span{
-  color:var(--gold2);
+    color:var(--gold);
 }
 
 .hero p{
-  max-width:680px;
-  color:#dce7e1;
-  font-size:17px;
+    color:var(--muted);
+
+    font-size:18px;
+
+    line-height:2;
+
+    max-width:650px;
+
+    margin-bottom:28px;
 }
 
 .hero-buttons{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:30px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
 }
 
 .btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:12px 22px;
-  border-radius:8px;
-  font-size:14px;
-  font-weight:bold;
-  transition:.2s;
+    border:none;
+
+    text-decoration:none;
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    padding:
+    14px 22px;
+
+    border-radius:16px;
+
+    font-weight:bold;
+
+    transition:.3s;
 }
 
 .btn-primary{
-  background:var(--gold);
-  color:#fff;
+    background:
+    linear-gradient(
+        135deg,
+        var(--green),
+        #0a9a6d
+    );
+
+    color:white;
+
+    box-shadow:
+    0 12px 30px rgba(8,123,88,.22);
 }
 
 .btn-primary:hover{
-  background:var(--gold2);
+    transform:translateY(-4px);
 }
 
-.btn-light{
-  border:1px solid rgba(255,255,255,.35);
-  color:#fff;
+.btn-secondary{
+    background:white;
+
+    color:var(--green);
+
+    border:
+    1px solid #d7e9e2;
 }
 
-.hero-card{
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(225,191,106,.3);
-  border-radius:18px;
-  padding:35px;
-  text-align:center;
+.btn-secondary:hover{
+    border-color:var(--green);
+
+    transform:translateY(-3px);
 }
 
-.globe{
-  font-size:70px;
-  margin-bottom:15px;
+
+/* =========================================================
+   HERO IMAGE
+========================================================= */
+
+.hero-visual{
+    position:relative;
+
+    min-height:500px;
+
+    border-radius:
+    45px;
+
+    overflow:hidden;
+
+    box-shadow:
+    var(--shadow-big);
+
+    background:
+    #dceee7;
 }
 
-.hero-card h2{
-  font-size:25px;
-  margin-bottom:10px;
+.hero-visual img{
+    width:100%;
+    height:100%;
+
+    min-height:500px;
+
+    object-fit:cover;
+
+    transition:
+    transform 1s ease;
 }
 
-.hero-card h2 span{
-  color:var(--gold2);
+.hero-visual:hover img{
+    transform:scale(1.05);
 }
 
-.hero-card p{
-  font-size:14px;
-  margin:auto;
+.hero-overlay{
+    position:absolute;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+        180deg,
+        transparent 45%,
+        rgba(0,45,35,.72)
+    );
+
+    display:flex;
+
+    align-items:flex-end;
+
+    padding:30px;
+
+    color:white;
 }
 
-.hero-info{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  margin-top:25px;
-  border-top:1px solid rgba(255,255,255,.15);
-  padding-top:20px;
-  gap:15px;
+.hero-overlay h3{
+    font-size:25px;
 }
 
-.hero-info strong{
-  display:block;
-  color:var(--gold2);
-  font-size:25px;
+
+/* =========================================================
+   TITLES
+========================================================= */
+
+.section-title{
+    text-align:center;
+
+    margin-bottom:40px;
 }
 
-.hero-info small{
-  color:#d0dad5;
+.section-title .small{
+    color:var(--gold);
+
+    font-weight:bold;
+
+    margin-bottom:8px;
 }
 
-/* =====================================================
-   SECTIONS
-===================================================== */
-section{
-  padding:75px 0;
+.section-title h2{
+    font-size:
+    clamp(30px,5vw,48px);
+
+    color:var(--green-dark);
+
+    margin-bottom:12px;
 }
 
-.section-head{
-  text-align:center;
-  margin-bottom:45px;
+.section-title p{
+    max-width:750px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    line-height:1.9;
 }
 
-.section-head .num{
-  color:var(--gold);
-  font-weight:bold;
-  font-size:13px;
-}
 
-.section-head h2{
-  color:var(--green);
-  font-size:34px;
-  margin:5px 0 8px;
-}
-
-.section-head p{
-  color:var(--muted);
-  max-width:700px;
-  margin:auto;
-}
-
-/* =====================================================
-   INTRO
-===================================================== */
-.intro{
-  background:#fff;
-}
-
-.intro-grid{
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:25px;
-}
-
-.text-box{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:30px;
-  box-shadow:var(--shadow);
-}
-
-.text-box.gold{
-  border-top:4px solid var(--gold);
-}
-
-.text-box h3{
-  color:var(--green);
-  font-size:22px;
-  margin-bottom:12px;
-}
-
-.text-box p{
-  color:#52605a;
-  margin-bottom:12px;
-}
-
-.list{
-  list-style:none;
-  display:grid;
-  gap:10px;
-  margin-top:15px;
-}
-
-.list li{
-  padding:11px 14px;
-  background:#f7f8f5;
-  border-right:3px solid var(--gold);
-  border-radius:5px;
-}
-
-/* =====================================================
-   CONCEPT
-===================================================== */
-.concept{
-  background:var(--cream);
-}
-
-.compare{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-
-.compare-card{
-  background:#fff;
-  padding:30px;
-  border-radius:12px;
-  border:1px solid var(--border);
-}
-
-.compare-card h3{
-  color:var(--green);
-  margin-bottom:10px;
-}
-
-.compare-card strong{
-  color:var(--gold);
-}
-
-/* =====================================================
+/* =========================================================
    CARDS
-===================================================== */
+========================================================= */
+
 .cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(240px,1fr)
+    );
+
+    gap:20px;
 }
 
 .card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:25px;
-  box-shadow:var(--shadow);
+    background:white;
+
+    border:
+    1px solid rgba(8,123,88,.10);
+
+    border-radius:
+    var(--radius);
+
+    padding:25px;
+
+    box-shadow:
+    var(--shadow);
+
+    transition:
+    transform .3s,
+    box-shadow .3s;
 }
 
-.card-number{
-  color:var(--gold);
-  font-size:13px;
-  font-weight:bold;
+.card:hover{
+    transform:
+    translateY(-8px);
+
+    box-shadow:
+    0 25px 60px rgba(0,70,50,.15);
+}
+
+.card-icon{
+    width:60px;
+    height:60px;
+
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:28px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #e1f6ed,
+        #fff6d9
+    );
+
+    margin-bottom:18px;
 }
 
 .card h3{
-  color:var(--green);
-  margin:7px 0;
-  font-size:19px;
+    color:var(--green-dark);
+
+    margin-bottom:10px;
 }
 
 .card p{
-  color:var(--muted);
-  font-size:14px;
+    color:var(--muted);
+
+    line-height:1.9;
 }
 
-/* =====================================================
-   EGYPT
-===================================================== */
-.egypt{
-  background:var(--green);
-  color:#fff;
+
+/* =========================================================
+   IMAGE GRID
+========================================================= */
+
+.image-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:18px;
+
+    margin-top:30px;
 }
 
-.egypt .section-head h2{
-  color:#fff;
+.image-card{
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:25px;
+
+    min-height:260px;
+
+    box-shadow:var(--shadow);
 }
 
-.egypt .section-head p{
-  color:#cddbd4;
+.image-card img{
+    width:100%;
+    height:100%;
+
+    min-height:260px;
+
+    object-fit:cover;
+
+    transition:
+    transform .6s ease;
 }
 
-.egypt-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
+.image-card:hover img{
+    transform:scale(1.08);
 }
 
-.egypt-card{
-  border:1px solid rgba(225,191,106,.3);
-  padding:25px 18px;
-  border-radius:10px;
-  background:rgba(255,255,255,.045);
+.image-caption{
+    position:absolute;
+
+    bottom:0;
+    right:0;
+    left:0;
+
+    padding:45px 18px 18px;
+
+    color:white;
+
+    background:
+    linear-gradient(
+        transparent,
+        rgba(0,0,0,.78)
+    );
 }
 
-.egypt-card h3{
-  color:var(--gold2);
-  margin-bottom:8px;
+.image-caption h3{
+    font-size:18px;
 }
 
-.egypt-card p{
-  color:#d4e0da;
-  font-size:13px;
+
+/* =========================================================
+   BIG INFO
+========================================================= */
+
+.info-box{
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:30px;
+
+    align-items:center;
+
+    margin:35px 0;
 }
 
-/* =====================================================
-   COP27
-===================================================== */
-.cop{
-  background:#fff;
+.info-box img{
+    width:100%;
+
+    height:380px;
+
+    object-fit:cover;
+
+    border-radius:30px;
+
+    box-shadow:var(--shadow-big);
 }
 
-.cop-box{
-  background:
-    linear-gradient(135deg,#073b2a,#0b513b);
-  color:#fff;
-  border-radius:18px;
-  padding:45px;
-  display:grid;
-  grid-template-columns:1fr 300px;
-  gap:40px;
-  align-items:center;
+.info-text{
+    background:white;
+
+    padding:35px;
+
+    border-radius:30px;
+
+    box-shadow:var(--shadow);
 }
 
-.cop-box h2{
-  font-size:45px;
-  margin-bottom:10px;
+.info-text h3{
+    color:var(--green-dark);
+
+    font-size:28px;
+
+    margin-bottom:15px;
 }
 
-.cop-box h2 span{
-  color:var(--gold2);
+.info-text p{
+    color:var(--muted);
+
+    line-height:2;
+
+    margin-bottom:15px;
 }
 
-.cop-box p{
-  color:#dbe6e0;
+.info-text ul{
+    padding-right:20px;
+
+    color:#49645b;
+
+    line-height:2;
 }
 
-.cop-date{
-  border:1px solid rgba(225,191,106,.4);
-  border-radius:12px;
-  padding:30px;
-  text-align:center;
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:15px;
+
+    margin:35px 0;
 }
 
-.cop-date strong{
-  display:block;
-  color:var(--gold2);
-  font-size:52px;
+.stat{
+    background:white;
+
+    border-radius:23px;
+
+    padding:25px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+
+    border-bottom:
+    4px solid var(--gold);
 }
 
-.cop-date span{
-  color:#dce6e1;
+.stat strong{
+    display:block;
+
+    color:var(--green);
+
+    font-size:35px;
+
+    margin-bottom:8px;
 }
 
-/* =====================================================
-   RESULTS
-===================================================== */
-.results{
-  background:var(--cream);
+.stat span{
+    color:var(--muted);
 }
 
-.result-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
-}
 
-.result{
-  background:#fff;
-  border-radius:12px;
-  padding:25px;
-  border:1px solid var(--border);
-}
-
-.result strong{
-  display:block;
-  color:var(--gold);
-  font-size:25px;
-  margin-bottom:5px;
-}
-
-.result h3{
-  color:var(--green);
-  margin-bottom:7px;
-}
-
-.result p{
-  color:var(--muted);
-  font-size:14px;
-}
-
-/* =====================================================
-   SOLUTIONS
-===================================================== */
-.solution-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:18px;
-}
-
-.solution{
-  border:1px solid var(--border);
-  padding:25px;
-  border-radius:10px;
-  background:#fff;
-}
-
-.solution h3{
-  color:var(--green);
-  margin-bottom:7px;
-}
-
-.solution p{
-  color:var(--muted);
-  font-size:14px;
-}
-
-/* =====================================================
-   STUDENT
-===================================================== */
-.student{
-  background:#f1f4ef;
-}
-
-.student-box{
-  display:grid;
-  grid-template-columns:.7fr 1.3fr;
-  gap:35px;
-  align-items:center;
-}
-
-.student-title{
-  background:var(--green);
-  color:#fff;
-  padding:40px;
-  border-radius:15px;
-  text-align:center;
-}
-
-.student-title strong{
-  display:block;
-  color:var(--gold2);
-  font-size:55px;
-}
-
-.student-title h3{
-  font-size:24px;
-}
-
-.student-list{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.student-item{
-  background:#fff;
-  padding:18px;
-  border-radius:8px;
-  border:1px solid var(--border);
-}
-
-.student-item strong{
-  display:block;
-  color:var(--green);
-}
-
-.student-item span{
-  font-size:13px;
-  color:var(--muted);
-}
-
-/* =====================================================
+/* =========================================================
    TIMELINE
-===================================================== */
+========================================================= */
+
 .timeline{
-  display:grid;
-  gap:14px;
-  max-width:850px;
-  margin:auto;
+    position:relative;
+
+    max-width:900px;
+
+    margin:40px auto;
+}
+
+.timeline::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    bottom:0;
+
+    right:24px;
+
+    width:3px;
+
+    background:
+    linear-gradient(
+        var(--green),
+        var(--gold)
+    );
 }
 
 .timeline-item{
-  display:grid;
-  grid-template-columns:85px 1fr;
-  gap:18px;
-  align-items:start;
+    position:relative;
+
+    padding:
+    0 70px 35px 0;
 }
 
-.timeline-year{
-  color:var(--gold);
-  font-size:20px;
-  font-weight:bold;
-  text-align:center;
+.timeline-dot{
+    position:absolute;
+
+    right:10px;
+
+    top:0;
+
+    width:30px;
+    height:30px;
+
+    border-radius:50%;
+
+    background:
+    var(--green);
+
+    border:
+    5px solid #dff4eb;
+
+    z-index:2;
 }
 
 .timeline-content{
-  background:#fff;
-  border:1px solid var(--border);
-  border-right:3px solid var(--gold);
-  padding:18px;
-  border-radius:8px;
+    background:white;
+
+    border-radius:22px;
+
+    padding:22px;
+
+    box-shadow:var(--shadow);
 }
 
 .timeline-content h3{
-  color:var(--green);
-  margin-bottom:5px;
+    color:var(--green-dark);
+
+    margin-bottom:8px;
 }
 
 .timeline-content p{
-  color:var(--muted);
-  font-size:14px;
+    color:var(--muted);
+
+    line-height:1.8;
 }
 
-/* =====================================================
-   CONCLUSION
-===================================================== */
-.conclusion{
-  background:var(--green);
-  color:#fff;
-  text-align:center;
+
+/* =========================================================
+   EARTH
+========================================================= */
+
+.earth-section{
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:30px;
+
+    align-items:center;
 }
 
-.conclusion h2{
-  color:var(--gold2);
-  font-size:38px;
-  margin-bottom:15px;
+#earth-container{
+    width:100%;
+
+    height:500px;
+
+    background:
+    radial-gradient(
+        circle,
+        #071c31,
+        #02070e
+    );
+
+    border-radius:35px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 25px 70px rgba(0,0,0,.25);
+
+    position:relative;
 }
 
-.conclusion p{
-  max-width:780px;
-  margin:auto;
-  color:#dce6e0;
+.earth-help{
+    position:absolute;
+
+    bottom:18px;
+    right:18px;
+    left:18px;
+
+    background:
+    rgba(0,0,0,.55);
+
+    color:white;
+
+    padding:10px 14px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    font-size:13px;
+
+    backdrop-filter:blur(10px);
 }
 
-.quote{
-  font-size:25px;
-  margin-top:25px;
-  color:#fff;
+.earth-info{
+    background:white;
+
+    border-radius:30px;
+
+    padding:35px;
+
+    box-shadow:var(--shadow);
 }
 
-/* =====================================================
+.earth-info h3{
+    color:var(--green-dark);
+
+    font-size:30px;
+
+    margin-bottom:15px;
+}
+
+.earth-info p{
+    color:var(--muted);
+
+    line-height:2;
+}
+
+
+/* =========================================================
+   COP27 HERO
+========================================================= */
+
+.cop-hero{
+    min-height:480px;
+
+    border-radius:40px;
+
+    overflow:hidden;
+
+    position:relative;
+
+    background:
+    url("https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1800&q=85")
+    center/cover;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    box-shadow:var(--shadow-big);
+}
+
+.cop-overlay{
+    width:100%;
+
+    padding:50px;
+
+    color:white;
+
+    background:
+    linear-gradient(
+        transparent,
+        rgba(0,0,0,.82)
+    );
+}
+
+.cop-overlay h1{
+    font-size:
+    clamp(40px,7vw,80px);
+
+    margin-bottom:10px;
+}
+
+.cop-overlay p{
+    font-size:18px;
+
+    max-width:700px;
+
+    line-height:1.9;
+}
+
+
+/* =========================================================
+   CHART
+========================================================= */
+
+.chart{
+    background:white;
+
+    padding:30px;
+
+    border-radius:30px;
+
+    box-shadow:var(--shadow);
+
+    margin-top:30px;
+}
+
+.bar{
+    margin:22px 0;
+}
+
+.bar-head{
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:8px;
+
+    font-weight:bold;
+}
+
+.bar-track{
+    height:15px;
+
+    background:#e9f1ee;
+
+    border-radius:50px;
+
+    overflow:hidden;
+}
+
+.bar-fill{
+    height:100%;
+
+    width:0;
+
+    border-radius:50px;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--green),
+        var(--gold)
+    );
+
+    transition:
+    width 1.3s ease;
+}
+
+
+/* =========================================================
+   SOLUTION CARDS
+========================================================= */
+
+.solution{
+    position:relative;
+
+    min-height:230px;
+
+    padding:30px;
+
+    overflow:hidden;
+
+    background:white;
+
+    border-radius:28px;
+
+    box-shadow:var(--shadow);
+
+    border:1px solid #e2eee9;
+}
+
+.solution::after{
+    content:"";
+
+    position:absolute;
+
+    width:130px;
+    height:130px;
+
+    border-radius:50%;
+
+    left:-45px;
+    bottom:-45px;
+
+    background:
+    #e4f6ee;
+}
+
+.solution h3{
+    position:relative;
+
+    z-index:1;
+
+    color:var(--green-dark);
+
+    margin-bottom:12px;
+}
+
+.solution p{
+    position:relative;
+
+    z-index:1;
+
+    color:var(--muted);
+
+    line-height:1.9;
+}
+
+
+/* =========================================================
+   SOURCES
+========================================================= */
+
+.sources-hero{
+    text-align:center;
+
+    padding:20px 0 30px;
+}
+
+.sources-hero h1{
+    color:var(--green-dark);
+
+    font-size:
+    clamp(35px,6vw,60px);
+
+    margin:15px 0;
+}
+
+.sources-hero p{
+    color:var(--muted);
+
+    max-width:750px;
+
+    margin:auto;
+
+    line-height:1.9;
+}
+
+.official-links{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:18px;
+}
+
+.official-link{
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    text-decoration:none;
+
+    background:white;
+
+    border:
+    1px solid #e1eee9;
+
+    padding:20px;
+
+    border-radius:25px;
+
+    box-shadow:var(--shadow);
+
+    transition:.3s;
+}
+
+.official-link:hover{
+    transform:translateY(-6px);
+
+    border-color:var(--green);
+
+    box-shadow:
+    0 20px 50px rgba(8,123,88,.13);
+}
+
+.link-icon{
+    width:65px;
+    height:65px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:20px;
+
+    font-size:30px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #e2f6ee,
+        #fff4cf
+    );
+}
+
+.link-content{
+    flex:1;
+}
+
+.link-content h3{
+    color:var(--green-dark);
+
+    margin-bottom:7px;
+
+    font-size:17px;
+}
+
+.link-content span{
+    color:var(--muted);
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+.link-arrow{
+    width:40px;
+    height:40px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:var(--green);
+
+    color:white;
+
+    border-radius:50%;
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+.page-navigation{
+    width:min(1100px,92%);
+
+    margin:
+    45px auto 0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+}
+
+.nav-arrow{
+    border:none;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--green),
+        #0b9a6d
+    );
+
+    color:white;
+
+    padding:
+    14px 20px;
+
+    border-radius:16px;
+
+    font-weight:bold;
+
+    box-shadow:
+    0 10px 25px rgba(8,123,88,.18);
+
+    transition:.25s;
+}
+
+.nav-arrow:hover{
+    transform:translateY(-3px);
+}
+
+.nav-arrow:disabled{
+    opacity:.35;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+.page-counter{
+    color:var(--muted);
+
+    font-size:14px;
+
+    font-weight:bold;
+}
+
+
+/* =========================================================
+   FLOATING ARROWS
+========================================================= */
+
+.floating-nav{
+    position:fixed;
+
+    left:20px;
+    right:20px;
+
+    bottom:20px;
+
+    z-index:900;
+
+    pointer-events:none;
+
+    display:flex;
+
+    justify-content:space-between;
+}
+
+.float-arrow{
+    pointer-events:auto;
+
+    width:52px;
+    height:52px;
+
+    border-radius:50%;
+
+    border:
+    2px solid var(--gold);
+
+    background:
+    var(--green);
+
+    color:white;
+
+    font-size:23px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.18);
+
+    transition:.25s;
+}
+
+.float-arrow:hover{
+    transform:scale(1.08);
+}
+
+
+/* =========================================================
    FOOTER
-===================================================== */
+========================================================= */
+
 footer{
-  background:#04291e;
-  color:#cdd8d2;
-  padding:35px 0 20px;
+    background:
+    #064c3a;
+
+    color:white;
+
+    padding:35px 0;
+
+    text-align:center;
 }
 
-.footer-grid{
-  display:grid;
-  grid-template-columns:1.5fr 1fr 1fr;
-  gap:30px;
-}
-
-footer h3{
-  color:var(--gold2);
-  margin-bottom:10px;
-}
-
-footer a{
-  display:block;
-  color:#cdd8d2;
-  font-size:13px;
-  margin:5px 0;
+footer strong{
+    color:#f4d77d;
 }
 
 footer p{
-  font-size:13px;
-}
+    margin-top:8px;
 
-.footer-bottom{
-  margin-top:30px;
-  padding-top:18px;
-  border-top:1px solid rgba(255,255,255,.1);
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  flex-wrap:wrap;
-  font-size:12px;
-}
+    color:#c7ddd5;
 
-.footer-bottom strong{
-  color:var(--gold2);
-}
-
-/* =====================================================
-   BACK TO TOP
-===================================================== */
-.top{
-  position:fixed;
-  left:18px;
-  bottom:18px;
-  width:42px;
-  height:42px;
-  border:0;
-  border-radius:50%;
-  background:var(--gold);
-  color:#fff;
-  cursor:pointer;
-  display:none;
-  z-index:900;
-  font-size:18px;
-}
-
-.top.show{
-  display:block;
-}
-
-/* =====================================================
-   MOBILE
-===================================================== */
-@media(max-width:850px){
-
-  .menu-btn{
-    display:block;
-  }
-
-  .menu{
-    display:none;
-    position:absolute;
-    top:66px;
-    right:0;
-    left:0;
-    background:var(--green);
-    border-bottom:1px solid rgba(225,191,106,.2);
-    padding:10px 4%;
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  .menu.open{
-    display:flex;
-  }
-
-  .menu a{
-    text-align:center;
-  }
-
-  .hero{
-    padding:50px 0;
-  }
-
-  .hero-grid,
-  .intro-grid,
-  .student-box,
-  .cop-box{
-    grid-template-columns:1fr;
-  }
-
-  .hero-card{
-    padding:25px;
-  }
-
-  .cards,
-  .result-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .egypt-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .cop-box{
-    padding:30px;
-  }
-
-  .student-list{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .footer-grid{
-    grid-template-columns:1fr 1fr;
-  }
-}
-
-@media(max-width:560px){
-
-  .official-inner{
-    gap:12px;
-  }
-
-  .official-logo{
-    width:60px;
-    height:60px;
-  }
-
-  .official-title span{
-    font-size:10px;
-  }
-
-  .official-title strong{
     font-size:13px;
-  }
-
-  .official-title .school{
-    font-size:10px;
-  }
-
-  .hero h1{
-    font-size:45px;
-  }
-
-  .hero p{
-    font-size:15px;
-  }
-
-  section{
-    padding:55px 0;
-  }
-
-  .section-head h2{
-    font-size:27px;
-  }
-
-  .cards,
-  .result-grid,
-  .egypt-grid,
-  .solution-grid,
-  .student-list{
-    grid-template-columns:1fr;
-  }
-
-  .compare{
-    grid-template-columns:1fr;
-  }
-
-  .cop-box h2{
-    font-size:37px;
-  }
-
-  .cop-date strong{
-    font-size:43px;
-  }
-
-  .timeline-item{
-    grid-template-columns:65px 1fr;
-    gap:10px;
-  }
-
-  .footer-grid{
-    grid-template-columns:1fr;
-  }
-
-  .footer-bottom{
-    flex-direction:column;
-  }
 }
+
+
+/* =========================================================
+   TOP BUTTON
+========================================================= */
+
+#topBtn{
+    position:fixed;
+
+    left:20px;
+
+    bottom:90px;
+
+    width:45px;
+    height:45px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:
+    var(--gold);
+
+    color:white;
+
+    font-size:20px;
+
+    z-index:950;
+
+    display:none;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.15);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px){
+
+    .hero{
+        grid-template-columns:1fr;
+    }
+
+    .hero-visual{
+        min-height:380px;
+    }
+
+    .hero-visual img{
+        min-height:380px;
+    }
+
+    .info-box{
+        grid-template-columns:1fr;
+    }
+
+    .earth-section{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .image-grid{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .official-links{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+@media(max-width:650px){
+
+    .official-inner{
+        min-height:95px;
+
+        gap:8px;
+    }
+
+    .logo{
+        width:80px;
+        height:80px;
+    }
+
+    .official-text span{
+        font-size:10px;
+    }
+
+    .official-text strong{
+        font-size:14px;
+    }
+
+    .official-text .school{
+        font-size:10px;
+    }
+
+    .navbar{
+        min-height:58px;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .menu{
+        display:none;
+
+        position:absolute;
+
+        top:100%;
+
+        right:0;
+        left:0;
+
+        background:white;
+
+        padding:12px;
+
+        box-shadow:
+        0 15px 35px rgba(0,0,0,.08);
+
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    .menu.open{
+        display:flex;
+    }
+
+    .menu button{
+        border-radius:12px;
+
+        text-align:right;
+    }
+
+    .hero{
+        min-height:auto;
+
+        padding-top:20px;
+    }
+
+    .hero h1{
+        font-size:42px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .hero-visual{
+        min-height:300px;
+    }
+
+    .hero-visual img{
+        min-height:300px;
+    }
+
+    .image-grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .stat strong{
+        font-size:27px;
+    }
+
+    .info-text{
+        padding:25px;
+    }
+
+    #earth-container{
+        height:350px;
+    }
+
+    .cop-overlay{
+        padding:28px;
+    }
+
+    .cop-overlay h1{
+        font-size:48px;
+    }
+
+    .page-navigation{
+        flex-direction:column;
+    }
+
+    .nav-arrow{
+        width:100%;
+    }
+
+}
+
+
+/* =========================================================
+   EXTRA ANIMATION
+========================================================= */
+
+.reveal{
+    opacity:0;
+
+    transform:
+    translateY(25px);
+
+    transition:
+    opacity .7s ease,
+    transform .7s ease;
+}
+
+.reveal.show{
+    opacity:1;
+
+    transform:
+    translateY(0);
+}
+
 </style>
 </head>
 
+
 <body>
 
+<div class="bg-orb one"></div>
+<div class="bg-orb two"></div>
+
+
 <!-- =====================================================
-     NAVIGATION
+     OFFICIAL HEADER
 ===================================================== -->
-<header class="navbar">
-  <div class="container nav-inner">
 
-    <a href="#home" class="logo-text">
-      التغيرات <span>المناخية</span>
-    </a>
+<header>
 
-    <button class="menu-btn" id="menuBtn" aria-label="القائمة">
-      ☰
-    </button>
+<section class="official">
 
-    <nav class="menu" id="menu">
-      <a href="#home" class="active">الرئيسية</a>
-      <a href="#intro">المقدمة</a>
-      <a href="#concept">المفهوم</a>
-      <a href="#causes">الأسباب</a>
-      <a href="#effects">الآثار</a>
-      <a href="#egypt">مصر</a>
-      <a href="#cop27">COP27</a>
-      <a href="#results">النتائج</a>
-      <a href="#solutions">الحلول</a>
-      <a href="#student">دور الطالب</a>
-      <a href="#conclusion">الخاتمة</a>
-    </nav>
+<div class="official-inner">
 
-  </div>
+<img
+src="logo1.png"
+class="logo"
+alt="شعار محافظة السويس"
+>
+
+<div class="official-text">
+
+<span>جمهورية مصر العربية</span>
+
+<span>محافظة السويس</span>
+
+<strong>
+إدارة جنوب السويس التعليمية
+</strong>
+
+<span class="school">
+مدرسة جمال عبد الناصر الثانوية بنين
+</span>
+
+</div>
+
+<img
+src="logo2.png"
+class="logo"
+alt="الشعار"
+>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+<button
+class="mobile-menu"
+id="mobileMenu"
+>
+☰
+</button>
+
+<div
+class="menu"
+id="menu"
+>
+
+<button data-page="home">
+الرئيسية
+</button>
+
+<button data-page="intro">
+المقدمة
+</button>
+
+<button data-page="concept">
+مفهوم التغير المناخي
+</button>
+
+<button data-page="weather">
+الطقس والمناخ
+</button>
+
+<button data-page="causes">
+الأسباب
+</button>
+
+<button data-page="gases">
+الغازات الدفيئة
+</button>
+
+<button data-page="effects">
+الآثار
+</button>
+
+<button data-page="egypt">
+مصر والمناخ
+</button>
+
+<button data-page="efforts">
+جهود مصر
+</button>
+
+<button data-page="energy">
+الطاقة المتجددة
+</button>
+
+<button data-page="cop27">
+COP27
+</button>
+
+<button data-page="sharm">
+شرم الشيخ
+</button>
+
+<button data-page="topics">
+موضوعات COP27
+</button>
+
+<button data-page="results">
+مخرجات COP27
+</button>
+
+<button data-page="loss">
+الخسائر والأضرار
+</button>
+
+<button data-page="adaptation">
+التكيف
+</button>
+
+<button data-page="solutions">
+الحلول
+</button>
+
+<button data-page="state">
+دور الدولة
+</button>
+
+<button data-page="school">
+دور المدرسة
+</button>
+
+<button data-page="student">
+دور الطالب
+</button>
+
+<button data-page="quick">
+معلومات سريعة
+</button>
+
+<button data-page="conclusion">
+الخاتمة
+</button>
+
+<button data-page="sources">
+المصادر الرسمية
+</button>
+
+</div>
+
+</nav>
+
 </header>
 
 
-<!-- =====================================================
-     OFFICIAL INFORMATION
-===================================================== -->
-<section class="official" id="home">
-  <div class="container official-inner">
-
-    <img
-      src="images/logo1.png"
-      alt="الشعار الأول"
-      class="official-logo"
-      width="85"
-      height="85"
-      loading="eager">
-
-    <div class="official-title">
-      <span>جمهورية مصر العربية</span>
-      <span>محافظة السويس</span>
-      <strong>إدارة جنوب السويس التعليمية</strong>
-      <span class="school">مدرسة جمال عبد الناصر الثانوية بنين</span>
-    </div>
-
-    <img
-      src="images/logo2.png"
-      alt="الشعار الثاني"
-      class="official-logo"
-      width="85"
-      height="85"
-      loading="eager">
-
-  </div>
-</section>
+<main>
 
 
 <!-- =====================================================
-     HERO
+     1 HOME
 ===================================================== -->
-<section class="hero">
 
-  <div class="container hero-grid">
+<section
+class="page active"
+id="page-home"
+>
 
-    <div>
+<div class="container">
 
-      <span class="badge">
-        منصة تعليمية معرفية
-      </span>
+<div class="hero">
 
-      <h1>
-        التغيرات
-        <span>المناخية</span>
-      </h1>
+<div class="hero-content">
 
-      <p>
-        رحلة تعليمية متكاملة لفهم التغير المناخي،
-        والتعرف على أسبابه وآثاره، وجهود مصر في مواجهته،
-        مع إلقاء الضوء على مؤتمر COP27 الذي استضافته
-        مدينة شرم الشيخ عام 2022.
-      </p>
+<div class="badge">
+🌍 مشروع تعليمي تفاعلي
+</div>
 
-      <div class="hero-buttons">
-        <a href="#intro" class="btn btn-primary">
-          ابدأ الرحلة ←
-        </a>
+<h1>
+التغيرات
+<span>المناخية</span>
+</h1>
 
-        <a href="#cop27" class="btn btn-light">
-          اكتشف COP27
-        </a>
-      </div>
+<p>
+رحلة تعليمية تفاعلية للتعرف على التغير المناخي،
+أسبابه وآثاره وحلول مواجهته، مع التركيز على مصر
+ومؤتمر المناخ COP27 الذي استضافته مدينة شرم الشيخ.
+</p>
 
-    </div>
+<div class="hero-buttons">
 
+<button
+class="btn btn-primary"
+onclick="goToPage('intro')"
+>
+ابدأ الرحلة ←
+</button>
 
-    <div class="hero-card">
+<button
+class="btn btn-secondary"
+onclick="goToPage('cop27')"
+>
+اكتشف COP27
+</button>
 
-      <div class="globe">🌍</div>
+</div>
 
-      <h2>
-        مستقبلنا يبدأ من
-        <span>وعينا</span>
-      </h2>
-
-      <p>
-        فهم التغيرات المناخية يساعدنا على اتخاذ قرارات
-        أكثر وعيًا تجاه البيئة والمجتمع والأجيال القادمة.
-      </p>
-
-      <div class="hero-info">
-        <div>
-          <strong>COP27</strong>
-          <small>مؤتمر شرم الشيخ</small>
-        </div>
-
-        <div>
-          <strong>2022</strong>
-          <small>عام الاستضافة</small>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
+</div>
 
 
-<!-- =====================================================
-     INTRODUCTION
-===================================================== -->
-<section class="intro" id="intro">
+<div class="hero-visual">
 
-  <div class="container">
+<img
+src="https://images.unsplash.com/photo-1569511166187-97eb6e387f8f?auto=format&fit=crop&w=1400&q=85"
+alt="الطبيعة والمناخ"
+>
 
-    <div class="section-head">
-      <span class="num">01 — المقدمة</span>
-      <h2>لماذا نتحدث عن التغيرات المناخية؟</h2>
-      <p>
-        أصبح تغير المناخ من القضايا التي تؤثر في جوانب متعددة
-        من حياة الإنسان والبيئة والاقتصاد.
-      </p>
-    </div>
+<div class="hero-overlay">
 
+<div>
 
-    <div class="intro-grid">
+<h3>
+كوكب واحد... ومسؤولية مشتركة
+</h3>
 
-      <article class="text-box gold">
+<p>
+فهم المناخ هو الخطوة الأولى نحو حماية المستقبل.
+</p>
 
-        <h3>كوكبنا يتغير</h3>
+</div>
 
-        <p>
-          المناخ هو وصف طويل المدى للظروف الجوية المعتادة في منطقة
-          معينة، بينما يشير التغير المناخي إلى تغيرات طويلة الأمد
-          في درجات الحرارة وأنماط الطقس.
-        </p>
+</div>
 
-        <p>
-          وقد شهدت الأرض تغيرات مناخية طبيعية عبر تاريخها،
-          إلا أن الأنشطة البشرية الحديثة أدت إلى زيادة كبيرة
-          في تركيز بعض الغازات الدفيئة في الغلاف الجوي.
-        </p>
+</div>
 
-        <p>
-          ولهذا أصبح فهم هذه الظاهرة ضرورة علمية ومجتمعية،
-          حتى نستطيع التعامل مع آثارها والتخطيط للمستقبل.
-        </p>
-
-      </article>
+</div>
 
 
-      <article class="text-box">
+<div class="stats">
 
-        <h3>أهم ما سنتعلمه</h3>
+<div class="stat">
+<strong>23</strong>
+<span>صفحة تفاعلية</span>
+</div>
 
-        <ul class="list">
+<div class="stat">
+<strong>∞</strong>
+<span>معلومات ومعارف</span>
+</div>
 
-          <li>ما المقصود بالتغير المناخي؟</li>
-          <li>ما الفرق بين الطقس والمناخ؟</li>
-          <li>ما أهم أسباب تغير المناخ؟</li>
-          <li>كيف يؤثر تغير المناخ في الإنسان والبيئة؟</li>
-          <li>ما موقف مصر من قضية المناخ؟</li>
-          <li>ما أهمية مؤتمر COP27؟</li>
-          <li>ما الحلول الممكنة لمواجهة التحدي؟</li>
-          <li>ما دور الطالب والمدرسة والمجتمع؟</li>
+<div class="stat">
+<strong>2022</strong>
+<span>عام COP27</span>
+</div>
 
-        </ul>
+<div class="stat">
+<strong>🌍</strong>
+<span>كوكب واحد</span>
+</div>
 
-      </article>
+</div>
 
-    </div>
-
-  </div>
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     CONCEPT
+     2 INTRO
 ===================================================== -->
-<section class="concept" id="concept">
 
-  <div class="container">
+<section
+class="page"
+id="page-intro"
+>
 
-    <div class="section-head">
-      <span class="num">02 — المفهوم</span>
-      <h2>ما هو التغير المناخي؟</h2>
-      <p>
-        لفهم القضية بشكل صحيح، يجب أولًا التمييز بين الطقس
-        والمناخ والتغيرات التي تحدث على المدى الطويل.
-      </p>
-    </div>
+<div class="container">
 
+<div class="section-title">
 
-    <div class="compare">
+<div class="small">
+01 — البداية
+</div>
 
-      <article class="compare-card">
-        <h3>الطقس</h3>
-        <p>
-          هو حالة الغلاف الجوي في مكان محدد وخلال فترة زمنية
-          قصيرة، مثل درجة الحرارة والأمطار والرياح في يوم معين.
-        </p>
-        <strong>مثال:</strong>
-        <p>
-          ارتفاع درجة الحرارة اليوم أو سقوط الأمطار غدًا.
-        </p>
-      </article>
+<h2>
+لماذا نتحدث عن المناخ؟
+</h2>
+
+<p>
+المناخ جزء أساسي من الحياة على الأرض، وأي تغيرات
+كبيرة ومستمرة فيه يمكن أن تؤثر في الإنسان والطبيعة
+والاقتصاد والموارد.
+</p>
+
+</div>
 
 
-      <article class="compare-card">
-        <h3>المناخ</h3>
-        <p>
-          هو النمط العام للظروف الجوية في منطقة ما خلال فترات
-          زمنية طويلة، ويشمل درجات الحرارة والأمطار والرياح وغيرها.
-        </p>
-        <strong>مثال:</strong>
-        <p>
-          طبيعة المناخ الصحراوي في معظم مناطق مصر.
-        </p>
-      </article>
+<div class="info-box">
 
-    </div>
+<img
+src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=85"
+alt="طبيعة"
+>
 
-  </div>
+<div class="info-text">
+
+<h3>
+المناخ ليس مجرد حالة جوية
+</h3>
+
+<p>
+المناخ يصف الأنماط العامة للطقس على مدى فترات
+زمنية طويلة، بينما الطقس هو حالة الغلاف الجوي
+في مكان ووقت محددين.
+</p>
+
+<ul>
+
+<li>
+ارتفاع درجات الحرارة العالمية.
+</li>
+
+<li>
+تغير أنماط الأمطار.
+</li>
+
+<li>
+تغير النظم البيئية.
+</li>
+
+<li>
+زيادة بعض المخاطر المناخية.
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     CAUSES
+     3 CONCEPT
 ===================================================== -->
-<section id="causes">
 
-  <div class="container">
+<section
+class="page"
+id="page-concept"
+>
 
-    <div class="section-head">
-      <span class="num">03 — الأسباب</span>
-      <h2>ما أسباب التغيرات المناخية؟</h2>
-      <p>
-        توجد عوامل طبيعية، لكن النشاط البشري الحديث يمثل عاملًا
-        مهمًا في الارتفاع الحالي لتركيز الغازات الدفيئة.
-      </p>
-    </div>
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+02 — المفهوم
+</div>
+
+<h2>
+ما هو التغير المناخي؟
+</h2>
+
+<p>
+هو تغير طويل الأمد في خصائص المناخ، ويمكن أن يحدث
+بسبب عوامل طبيعية أو نتيجة الأنشطة البشرية، خاصة
+عندما تؤدي إلى زيادة تركيزات غازات الدفيئة.
+</p>
+
+</div>
 
 
-    <div class="cards">
+<div class="cards">
 
-      <article class="card">
-        <span class="card-number">01</span>
-        <h3>الوقود الأحفوري</h3>
-        <p>
-          يؤدي استخدام الفحم والنفط والغاز في إنتاج الطاقة والنقل
-          والصناعة إلى انبعاث غازات دفيئة إلى الغلاف الجوي.
-        </p>
-      </article>
+<div class="card">
 
-      <article class="card">
-        <span class="card-number">02</span>
-        <h3>الصناعة</h3>
-        <p>
-          بعض العمليات الصناعية تنتج انبعاثات مباشرة وغير مباشرة
-          مرتبطة باستهلاك الطاقة والمواد الخام.
-        </p>
-      </article>
+<div class="card-icon">
+🌡️
+</div>
 
-      <article class="card">
-        <span class="card-number">03</span>
-        <h3>النقل</h3>
-        <p>
-          تعتمد قطاعات عديدة من النقل على الوقود، ولذلك يرتبط
-          استخدامها بانبعاثات غازات الدفيئة.
-        </p>
-      </article>
+<h3>
+ارتفاع الحرارة
+</h3>
 
-      <article class="card">
-        <span class="card-number">04</span>
-        <h3>إزالة الغابات</h3>
-        <p>
-          تساعد الأشجار والنظم البيئية في تخزين الكربون، ولذلك
-          يؤدي فقدان الغطاء النباتي إلى تقليل هذه القدرة.
-        </p>
-      </article>
+<p>
+زيادة متوسط درجات حرارة سطح الأرض والغلاف الجوي
+تعد من أبرز مظاهر الاحترار العالمي.
+</p>
 
-      <article class="card">
-        <span class="card-number">05</span>
-        <h3>الزراعة</h3>
-        <p>
-          ترتبط بعض الأنشطة الزراعية والثروة الحيوانية بانبعاث
-          غازات دفيئة مختلفة.
-        </p>
-      </article>
+</div>
 
-      <article class="card">
-        <span class="card-number">06</span>
-        <h3>الاستهلاك والنفايات</h3>
-        <p>
-          زيادة الاستهلاك وإنتاج النفايات ترفع الطلب على الموارد
-          والطاقة، وقد تنتج عنها انبعاثات إضافية.
-        </p>
-      </article>
 
-    </div>
+<div class="card">
 
-  </div>
+<div class="card-icon">
+🌧️
+</div>
+
+<h3>
+تغير الأمطار
+</h3>
+
+<p>
+يمكن أن تتغير كميات الأمطار وتوقيتها وتوزيعها
+من منطقة إلى أخرى.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">
+🌊
+</div>
+
+<h3>
+تغير مستوى البحر
+</h3>
+
+<p>
+ارتفاع مستوى سطح البحر يمثل تحديًا للمناطق
+الساحلية والمنخفضة.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">
+🌳
+</div>
+
+<h3>
+تغير النظم البيئية
+</h3>
+
+<p>
+تتأثر الأنظمة البيئية عندما تتغير درجات الحرارة
+والمياه والموائل الطبيعية.
+</p>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     EFFECTS
+     4 WEATHER
 ===================================================== -->
-<section class="concept" id="effects">
 
-  <div class="container">
+<section
+class="page"
+id="page-weather"
+>
 
-    <div class="section-head">
-      <span class="num">04 — الآثار</span>
-      <h2>آثار التغير المناخي</h2>
-      <p>
-        لا يقتصر تأثير تغير المناخ على ارتفاع الحرارة فقط،
-        بل يمتد إلى البيئة والمياه والزراعة والمجتمعات.
-      </p>
-    </div>
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+03 — افهم الفرق
+</div>
+
+<h2>
+الطقس والمناخ
+</h2>
+
+<p>
+الطقس والمناخ مرتبطان، لكنهما ليسا الشيء نفسه.
+</p>
+
+</div>
 
 
-    <div class="cards">
+<div class="image-grid">
 
-      <article class="card">
-        <span class="card-number">01</span>
-        <h3>ارتفاع درجات الحرارة</h3>
-        <p>
-          يؤدي الاحترار العالمي إلى زيادة متوسط درجات الحرارة
-          وتغير أنماط موجات الحر في مناطق مختلفة.
-        </p>
-      </article>
+<div class="image-card">
 
-      <article class="card">
-        <span class="card-number">02</span>
-        <h3>المياه</h3>
-        <p>
-          يمكن أن تؤثر التغيرات المناخية في موارد المياه
-          وتوقيت هطول الأمطار واحتياجات الري.
-        </p>
-      </article>
+<img
+src="https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=1000&q=85"
+alt="طقس"
+>
 
-      <article class="card">
-        <span class="card-number">03</span>
-        <h3>الزراعة</h3>
-        <p>
-          تغير درجات الحرارة والمياه والظروف الجوية قد يؤثر
-          في إنتاجية بعض المحاصيل.
-        </p>
-      </article>
+<div class="image-caption">
 
-      <article class="card">
-        <span class="card-number">04</span>
-        <h3>السواحل</h3>
-        <p>
-          تواجه المناطق الساحلية تحديات مرتبطة بارتفاع مستوى
-          سطح البحر والتغيرات في الظروف البحرية.
-        </p>
-      </article>
+<h3>
+الطقس
+</h3>
 
-      <article class="card">
-        <span class="card-number">05</span>
-        <h3>التنوع الحيوي</h3>
-        <p>
-          تغير الظروف البيئية يمكن أن يضغط على بعض الأنواع
-          والنظم البيئية التي تعتمد على ظروف محددة.
-        </p>
-      </article>
+<p>
+ما يحدث في الغلاف الجوي الآن أو خلال فترة قصيرة.
+</p>
 
-      <article class="card">
-        <span class="card-number">06</span>
-        <h3>المجتمعات</h3>
-        <p>
-          قد تمتد آثار تغير المناخ إلى الصحة والاقتصاد والبنية
-          التحتية والأمن الغذائي وسبل المعيشة.
-        </p>
-      </article>
+</div>
 
-    </div>
+</div>
 
-  </div>
+
+<div class="image-card">
+
+<img
+src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=85"
+alt="مناخ"
+>
+
+<div class="image-caption">
+
+<h3>
+المناخ
+</h3>
+
+<p>
+الأنماط الجوية طويلة المدى في منطقة معينة.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="image-card">
+
+<img
+src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=85"
+alt="بيئة"
+>
+
+<div class="image-caption">
+
+<h3>
+النظام المناخي
+</h3>
+
+<p>
+منظومة مترابطة تضم الغلاف الجوي والمحيطات واليابسة.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     EGYPT
+     5 CAUSES
 ===================================================== -->
-<section class="egypt" id="egypt">
 
-  <div class="container">
+<section
+class="page"
+id="page-causes"
+>
 
-    <div class="section-head">
-      <span class="num">05 — مصر</span>
-      <h2>التغيرات المناخية في مصر</h2>
-      <p>
-        تواجه مصر مجموعة من التحديات المناخية، وفي الوقت نفسه
-        تعمل على دعم التكيف والتحول إلى مسارات أكثر استدامة.
-      </p>
-    </div>
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+04 — الأسباب
+</div>
+
+<h2>
+لماذا يتغير المناخ؟
+</h2>
+
+</div>
 
 
-    <div class="egypt-grid">
+<div class="cards">
 
-      <article class="egypt-card">
-        <h3>المياه</h3>
-        <p>
-          إدارة الموارد المائية بكفاءة تمثل عنصرًا أساسيًا
-          في التكيف مع التغيرات المناخية.
-        </p>
-      </article>
+<div class="card">
 
-      <article class="egypt-card">
-        <h3>الزراعة</h3>
-        <p>
-          تطوير الممارسات الزراعية وتحسين كفاءة استخدام المياه
-          يساعدان في مواجهة التحديات المستقبلية.
-        </p>
-      </article>
+<div class="card-icon">
+🏭
+</div>
 
-      <article class="egypt-card">
-        <h3>السواحل</h3>
-        <p>
-          حماية المناطق الساحلية والتخطيط للتغيرات المستقبلية
-          من جوانب التكيف المهمة.
-        </p>
-      </article>
+<h3>
+الأنشطة الصناعية
+</h3>
 
-      <article class="egypt-card">
-        <h3>الطاقة</h3>
-        <p>
-          التوسع في الطاقة المتجددة وتحسين كفاءة الطاقة
-          من مسارات خفض الانبعاثات.
-        </p>
-      </article>
+<p>
+بعض الأنشطة الصناعية تعتمد على الوقود الأحفوري
+وتنتج انبعاثات من غازات الدفيئة.
+</p>
 
-    </div>
+</div>
 
-  </div>
+
+<div class="card">
+
+<div class="card-icon">
+🚗
+</div>
+
+<h3>
+النقل
+</h3>
+
+<p>
+استخدام الوقود في المركبات والطائرات والسفن
+يمكن أن يؤدي إلى انبعاثات كربونية.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">
+🌲
+</div>
+
+<h3>
+إزالة الغابات
+</h3>
+
+<p>
+الغابات تخزن الكربون، وفقدانها يؤثر في دورة
+الكربون والنظم البيئية.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">
+⚡
+</div>
+
+<h3>
+إنتاج الطاقة
+</h3>
+
+<p>
+الاعتماد الكبير على مصادر الطاقة الأحفورية
+يرتبط بانبعاثات غازات الدفيئة.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="info-box">
+
+<div class="info-text">
+
+<h3>
+من المصدر إلى الغلاف الجوي
+</h3>
+
+<p>
+عندما تؤدي أنشطة بشرية إلى إطلاق كميات كبيرة من
+غازات الدفيئة، يمكن أن يتغير توازن الطاقة في
+النظام المناخي.
+</p>
+
+</div>
+
+<img
+src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1200&q=85"
+alt="طاقة وصناعة"
+>
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     COP27
+     6 GASES
 ===================================================== -->
-<section class="cop" id="cop27">
 
-  <div class="container">
+<section
+class="page"
+id="page-gases"
+>
 
-    <div class="section-head">
-      <span class="num">06 — COP27</span>
-      <h2>مؤتمر المناخ في شرم الشيخ</h2>
-      <p>
-        محطة مهمة في مسار المفاوضات الدولية حول تغير المناخ.
-      </p>
-    </div>
+<div class="container">
 
+<div class="section-title">
 
-    <div class="cop-box">
+<div class="small">
+05 — الغلاف الجوي
+</div>
 
-      <div>
+<h2>
+الغازات الدفيئة
+</h2>
 
-        <h2>
-          COP<span>27</span>
-        </h2>
+<p>
+تساعد بعض الغازات على الاحتفاظ بجزء من الحرارة داخل
+نظام الأرض. المشكلة ترتبط بزيادة تركيزات بعضها بسبب
+الأنشطة البشرية.
+</p>
 
-        <p>
-          استضافت مصر مؤتمر الأطراف في اتفاقية الأمم المتحدة
-          الإطارية بشأن تغير المناخ COP27 في مدينة شرم الشيخ
-          خلال عام 2022.
-        </p>
-
-        <p style="margin-top:12px;">
-          جمع المؤتمر ممثلين من دول ومنظمات مختلفة لمناقشة
-          قضايا المناخ، بما في ذلك خفض الانبعاثات والتكيف
-          والتمويل والخسائر والأضرار.
-        </p>
-
-      </div>
+</div>
 
 
-      <div class="cop-date">
-        <strong>2022</strong>
-        <span>شرم الشيخ — مصر</span>
-      </div>
+<div class="cards">
 
-    </div>
+<div class="card">
+<div class="card-icon">🌫️</div>
+<h3>ثاني أكسيد الكربون</h3>
+<p>
+ينتج من احتراق الوقود الأحفوري ومن بعض العمليات
+الصناعية وتغير استخدامات الأراضي.
+</p>
+</div>
 
-  </div>
+<div class="card">
+<div class="card-icon">🐄</div>
+<h3>الميثان</h3>
+<p>
+ينتج من مصادر متعددة تشمل الزراعة وإدارة المخلفات
+وإنتاج الوقود.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🌾</div>
+<h3>أكسيد النيتروز</h3>
+<p>
+يرتبط بعدة أنشطة زراعية وصناعية.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">☁️</div>
+<h3>بخار الماء</h3>
+<p>
+عنصر طبيعي مهم في النظام المناخي، ويتأثر تركيزه
+بدرجة الحرارة.
+</p>
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     COP27 TIMELINE
+     7 EFFECTS
 ===================================================== -->
-<section class="concept">
 
-  <div class="container">
+<section
+class="page"
+id="page-effects"
+>
 
-    <div class="section-head">
-      <span class="num">رحلة COP27</span>
-      <h2>محطات مهمة</h2>
-      <p>
-        نظرة مبسطة على أهمية المؤتمر وما دار حوله.
-      </p>
-    </div>
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+06 — الآثار
+</div>
+
+<h2>
+آثار التغير المناخي
+</h2>
+
+</div>
 
 
-    <div class="timeline">
+<div class="image-grid">
 
-      <div class="timeline-item">
-        <div class="timeline-year">2022</div>
-        <div class="timeline-content">
-          <h3>استضافة مصر للمؤتمر</h3>
-          <p>
-            انعقد مؤتمر COP27 في مدينة شرم الشيخ بمشاركة واسعة
-            من الدول والمنظمات والجهات المعنية بالمناخ.
-          </p>
-        </div>
-      </div>
+<div class="image-card">
 
-      <div class="timeline-item">
-        <div class="timeline-year">المناقشات</div>
-        <div class="timeline-content">
-          <h3>التكيف مع تغير المناخ</h3>
-          <p>
-            ناقشت الأطراف الدولية أهمية مساعدة المجتمعات
-            على التعامل مع الآثار المناخية الحالية والمستقبلية.
-          </p>
-        </div>
-      </div>
+<img
+src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=85"
+alt="حرارة"
+>
 
-      <div class="timeline-item">
-        <div class="timeline-year">التمويل</div>
-        <div class="timeline-content">
-          <h3>العمل المناخي</h3>
-          <p>
-            كان تمويل العمل المناخي من الموضوعات الرئيسية
-            في المفاوضات الدولية.
-          </p>
-        </div>
-      </div>
+<div class="image-caption">
+<h3>ارتفاع الحرارة</h3>
+<p>تغير درجات الحرارة يمكن أن يؤثر في الإنسان والطبيعة.</p>
+</div>
 
-      <div class="timeline-item">
-        <div class="timeline-year">الخسائر</div>
-        <div class="timeline-content">
-          <h3>الخسائر والأضرار</h3>
-          <p>
-            حظيت قضية الخسائر والأضرار باهتمام كبير خلال
-            المفاوضات التي شهدها المؤتمر.
-          </p>
-        </div>
-      </div>
+</div>
 
-    </div>
 
-  </div>
+<div class="image-card">
+
+<img
+src="https://images.unsplash.com/photo-1501691223387-dd0500403074?auto=format&fit=crop&w=1000&q=85"
+alt="مياه"
+>
+
+<div class="image-caption">
+<h3>المياه</h3>
+<p>يمكن أن تتأثر موارد المياه بتغير الأمطار والحرارة.</p>
+</div>
+
+</div>
+
+
+<div class="image-card">
+
+<img
+src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85"
+alt="بحر"
+>
+
+<div class="image-caption">
+<h3>السواحل</h3>
+<p>المناطق الساحلية من المناطق التي تتطلب اهتمامًا بالتكيف.</p>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="cards" style="margin-top:25px">
+
+<div class="card">
+<div class="card-icon">🌾</div>
+<h3>الزراعة</h3>
+<p>تغير الحرارة والمياه يمكن أن يؤثر في الإنتاج الزراعي.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🐠</div>
+<h3>التنوع البيولوجي</h3>
+<p>تغير الظروف البيئية قد يضغط على بعض الأنواع والموائل.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🏙️</div>
+<h3>المدن</h3>
+<p>المدن تحتاج إلى التخطيط للتعامل مع المخاطر المناخية.</p>
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     RESULTS
+     8 EGYPT
 ===================================================== -->
-<section class="results" id="results">
 
-  <div class="container">
+<section
+class="page"
+id="page-egypt"
+>
 
-    <div class="section-head">
-      <span class="num">07 — المخرجات</span>
-      <h2>أبرز ما ارتبط بمؤتمر COP27</h2>
-      <p>
-        ركزت المناقشات والمخرجات على مجموعة واسعة من ملفات
-        العمل المناخي الدولي.
-      </p>
-    </div>
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+07 — مصر
+</div>
+
+<h2>
+التغير المناخي في مصر
+</h2>
+
+<p>
+موقع مصر الجغرافي وتنوع مناطقها الساحلية والزراعية
+يجعل دراسة المخاطر المناخية والتكيف معها موضوعًا
+مهمًا للتنمية.
+</p>
+
+</div>
 
 
-    <div class="result-grid">
+<div class="info-box">
 
-      <article class="result">
-        <strong>01</strong>
-        <h3>الخسائر والأضرار</h3>
-        <p>
-          برزت قضية معالجة الخسائر والأضرار المرتبطة بآثار
-          تغير المناخ ضمن أهم ملفات المؤتمر.
-        </p>
-      </article>
+<img
+src="https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=1200&q=85"
+alt="مصر"
+>
 
-      <article class="result">
-        <strong>02</strong>
-        <h3>التكيف</h3>
-        <p>
-          التأكيد على أهمية دعم قدرة المجتمعات والدول على
-          التعامل مع آثار تغير المناخ.
-        </p>
-      </article>
+<div class="info-text">
 
-      <article class="result">
-        <strong>03</strong>
-        <h3>التمويل المناخي</h3>
-        <p>
-          استمرار النقاش حول توفير التمويل اللازم للعمل
-          المناخي في الدول المختلفة.
-        </p>
-      </article>
+<h3>
+مناطق متعددة وتحديات مختلفة
+</h3>
 
-      <article class="result">
-        <strong>04</strong>
-        <h3>التحول الأخضر</h3>
-        <p>
-          دعم النقاشات المتعلقة بالطاقة النظيفة والتحول
-          نحو اقتصادات أكثر استدامة.
-        </p>
-      </article>
+<p>
+تختلف المخاطر والاحتياجات من منطقة إلى أخرى، لذلك
+لا يوجد حل واحد يناسب جميع المناطق.
+</p>
 
-      <article class="result">
-        <strong>05</strong>
-        <h3>التعاون الدولي</h3>
-        <p>
-          مواجهة تغير المناخ تتطلب تعاونًا بين الدول
-          والمؤسسات والمجتمعات.
-        </p>
-      </article>
+<ul>
+<li>المناطق الساحلية.</li>
+<li>دلتا النيل.</li>
+<li>المناطق الزراعية.</li>
+<li>المدن والمناطق الحضرية.</li>
+<li>المناطق الصحراوية.</li>
+</ul>
 
-      <article class="result">
-        <strong>06</strong>
-        <h3>الوعي</h3>
-        <p>
-          التعليم ونشر المعرفة يمثلان جزءًا أساسيًا من
-          بناء مجتمعات أكثر قدرة على التعامل مع التغير.
-        </p>
-      </article>
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     SOLUTIONS
+     9 EFFORTS
 ===================================================== -->
-<section id="solutions">
 
-  <div class="container">
+<section
+class="page"
+id="page-efforts"
+>
 
-    <div class="section-head">
-      <span class="num">08 — الحلول</span>
-      <h2>كيف نواجه التغيرات المناخية؟</h2>
-      <p>
-        الحلول تعتمد على مسارين متكاملين: الحد من مسببات
-        تغير المناخ والتكيف مع آثاره.
-      </p>
-    </div>
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+08 — مصر والعمل المناخي
+</div>
+
+<h2>
+جهود مصر
+</h2>
+
+<p>
+تشمل الاستجابة المناخية مسارات متعددة مثل التكيف
+والتخفيف والطاقة النظيفة والتمويل والتوعية.
+</p>
+
+</div>
 
 
-    <div class="solution-grid">
+<div class="cards">
 
-      <article class="solution">
-        <h3>الطاقة المتجددة</h3>
-        <p>
-          التوسع في مصادر الطاقة المتجددة يمكن أن يساعد
-          في تقليل الاعتماد على الوقود الأحفوري.
-        </p>
-      </article>
+<div class="card">
+<div class="card-icon">☀️</div>
+<h3>الطاقة المتجددة</h3>
+<p>
+التوسع في مصادر الطاقة المتجددة يمثل أحد مسارات
+التحول نحو نظام طاقة أكثر استدامة.
+</p>
+</div>
 
-      <article class="solution">
-        <h3>كفاءة الطاقة</h3>
-        <p>
-          استخدام الطاقة بكفاءة أكبر يقلل استهلاك الموارد
-          والانبعاثات المرتبطة بإنتاج الطاقة.
-        </p>
-      </article>
+<div class="card">
+<div class="card-icon">🌱</div>
+<h3>التشجير</h3>
+<p>
+زيادة المساحات الخضراء ودعم النظم البيئية يمكن
+أن يقدم فوائد بيئية متعددة.
+</p>
+</div>
 
-      <article class="solution">
-        <h3>النقل المستدام</h3>
-        <p>
-          تطوير وسائل النقل العامة والنظيفة وتحسين كفاءة
-          المركبات يمثل أحد مسارات العمل المناخي.
-        </p>
-      </article>
+<div class="card">
+<div class="card-icon">💧</div>
+<h3>إدارة المياه</h3>
+<p>
+تحسين كفاءة استخدام المياه ودعم إدارة الموارد
+جزء مهم من التكيف.
+</p>
+</div>
 
-      <article class="solution">
-        <h3>حماية الطبيعة</h3>
-        <p>
-          الحفاظ على الغابات والأنظمة البيئية والتنوع الحيوي
-          يساعد في دعم قدرة الطبيعة على مواجهة التغيرات.
-        </p>
-      </article>
+<div class="card">
+<div class="card-icon">🏙️</div>
+<h3>المدن المستدامة</h3>
+<p>
+التخطيط الحضري يمكن أن يساهم في تحسين قدرة المدن
+على التعامل مع المخاطر المناخية.
+</p>
+</div>
 
-      <article class="solution">
-        <h3>تقليل الهدر</h3>
-        <p>
-          تقليل استهلاك الموارد وإعادة الاستخدام والتدوير
-          يساعد على بناء أنماط إنتاج واستهلاك أكثر استدامة.
-        </p>
-      </article>
+</div>
 
-      <article class="solution">
-        <h3>التكيف</h3>
-        <p>
-          تطوير البنية التحتية والخدمات والخطط التي تساعد
-          المجتمعات على التعامل مع المخاطر المناخية.
-        </p>
-      </article>
-
-    </div>
-
-  </div>
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     STUDENT
+     10 ENERGY
 ===================================================== -->
-<section class="student" id="student">
 
-  <div class="container student-box">
+<section
+class="page"
+id="page-energy"
+>
 
-    <div class="student-title">
-      <strong>09</strong>
-      <h3>دور الطالب</h3>
-      <p>
-        التغيير الكبير يبدأ بعادات صغيرة.
-      </p>
-    </div>
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+09 — الطاقة
+</div>
+
+<h2>
+الطاقة المتجددة
+</h2>
+
+<p>
+مصادر الطاقة المتجددة تعتمد على موارد تتجدد طبيعيًا
+مثل الشمس والرياح والمياه.
+</p>
+
+</div>
 
 
-    <div class="student-list">
+<div class="image-grid">
 
-      <div class="student-item">
-        <strong>ترشيد الطاقة</strong>
-        <span>إطفاء الأجهزة والأنوار عند عدم الحاجة.</span>
-      </div>
+<div class="image-card">
 
-      <div class="student-item">
-        <strong>تقليل الهدر</strong>
-        <span>الحفاظ على الطعام والمياه والموارد.</span>
-      </div>
+<img
+src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=85"
+alt="طاقة شمسية"
+>
 
-      <div class="student-item">
-        <strong>إعادة الاستخدام</strong>
-        <span>الاستفادة من الأدوات بدل التخلص منها سريعًا.</span>
-      </div>
+<div class="image-caption">
+<h3>الطاقة الشمسية</h3>
+<p>تحويل ضوء الشمس إلى طاقة قابلة للاستخدام.</p>
+</div>
 
-      <div class="student-item">
-        <strong>الحفاظ على البيئة</strong>
-        <span>عدم إلقاء المخلفات وزيادة الاهتمام بالنظافة.</span>
-      </div>
+</div>
 
-      <div class="student-item">
-        <strong>نشر الوعي</strong>
-        <span>مشاركة المعلومات الصحيحة مع الأسرة والزملاء.</span>
-      </div>
 
-      <div class="student-item">
-        <strong>المشاركة المدرسية</strong>
-        <span>المشاركة في الأنشطة البيئية والتوعوية.</span>
-      </div>
+<div class="image-card">
 
-    </div>
+<img
+src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1000&q=85"
+alt="طاقة رياح"
+>
 
-  </div>
+<div class="image-caption">
+<h3>طاقة الرياح</h3>
+<p>استخدام حركة الرياح لتوليد الكهرباء.</p>
+</div>
+
+</div>
+
+
+<div class="image-card">
+
+<img
+src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1000&q=85"
+alt="طاقة"
+>
+
+<div class="image-caption">
+<h3>مستقبل الطاقة</h3>
+<p>التنوع في مصادر الطاقة يساعد على بناء أنظمة أكثر مرونة.</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =====================================================
-     CONCLUSION
+     11 COP27
 ===================================================== -->
-<section class="conclusion" id="conclusion">
 
-  <div class="container">
+<section
+class="page"
+id="page-cop27"
+>
 
-    <div class="section-head">
-      <span class="num">10 — الخاتمة</span>
-      <h2>مستقبلنا مسؤوليتنا</h2>
-    </div>
+<div class="container">
 
-    <p>
-      التغير المناخي تحدٍ عالمي يحتاج إلى العلم والتعاون
-      والتخطيط والعمل المستمر. وكلما زادت معرفتنا بالمشكلة
-      وأسبابها وآثارها، أصبحنا أكثر قدرة على اتخاذ خطوات
-      إيجابية لحماية البيئة ودعم مستقبل الأجيال القادمة.
-    </p>
+<div class="cop-hero">
 
-    <div class="quote">
-      "الوعي هو البداية، والعمل هو الطريق."
-    </div>
+<div class="cop-overlay">
 
-  </div>
+<div class="badge">
+🇪🇬 شرم الشيخ — مصر
+</div>
+
+<h1>
+COP27
+</h1>
+
+<p>
+مؤتمر الأمم المتحدة المعني بتغير المناخ لعام 2022،
+واستضافته مدينة شرم الشيخ في مصر.
+</p>
+
+<div style="margin-top:20px">
+
+<a
+class="btn btn-primary"
+href="https://unfccc.int/cop27"
+target="_blank"
+rel="noopener"
+>
+الصفحة الرسمية لـ COP27 ↗
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+<strong>27</strong>
+<span>الدورة السابعة والعشرون</span>
+</div>
+
+<div class="stat">
+<strong>2022</strong>
+<span>عام انعقاد المؤتمر</span>
+</div>
+
+<div class="stat">
+<strong>🇪🇬</strong>
+<span>مصر</span>
+</div>
+
+<div class="stat">
+<strong>🏝️</strong>
+<span>شرم الشيخ</span>
+</div>
+
+</div>
+
+</div>
 
 </section>
+
+
+<!-- =====================================================
+     12 SHARM
+===================================================== -->
+
+<section
+class="page"
+id="page-sharm"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+11 — المكان
+</div>
+
+<h2>
+شرم الشيخ
+</h2>
+
+<p>
+مدينة ساحلية في جنوب سيناء استضافت مؤتمر COP27 في
+نوفمبر 2022.
+</p>
+
+</div>
+
+
+<div class="info-box">
+
+<img
+src="https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=1400&q=85"
+alt="شرم الشيخ"
+>
+
+<div class="info-text">
+
+<h3>
+مدينة استضافت حدثًا عالميًا
+</h3>
+
+<p>
+شهدت شرم الشيخ خلال COP27 اجتماعات ومفاوضات وفعاليات
+متعلقة بالعمل المناخي الدولي.
+</p>
+
+<ul>
+<li>استضافة مؤتمر COP27.</li>
+<li>اجتماعات دولية.</li>
+<li>فعاليات مناخية.</li>
+<li>مناقشة قضايا التكيف والتمويل.</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     13 TOPICS
+===================================================== -->
+
+<section
+class="page"
+id="page-topics"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+12 — COP27
+</div>
+
+<h2>
+موضوعات المؤتمر
+</h2>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card">
+<div class="card-icon">💰</div>
+<h3>التمويل المناخي</h3>
+<p>
+تمويل الإجراءات والمشروعات المرتبطة بالمناخ كان من
+الموضوعات المهمة في المفاوضات الدولية.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🌍</div>
+<h3>التكيف</h3>
+<p>
+كيف يمكن للمجتمعات والدول الاستعداد والتعامل مع
+آثار التغير المناخي.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">⚡</div>
+<h3>التحول في الطاقة</h3>
+<p>
+تقليل الانبعاثات ودعم التحول نحو مصادر طاقة أنظف.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🌊</div>
+<h3>الخسائر والأضرار</h3>
+<p>
+التعامل مع الآثار المناخية التي تتجاوز قدرة بعض
+المجتمعات على التكيف.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     14 RESULTS
+===================================================== -->
+
+<section
+class="page"
+id="page-results"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+13 — المخرجات
+</div>
+
+<h2>
+ماذا خرج من COP27؟
+</h2>
+
+<p>
+من أبرز نتائج COP27 إنشاء ترتيبات تمويلية جديدة،
+بما في ذلك صندوق مخصص لمواجهة الخسائر والأضرار،
+وذلك ضمن العملية الدولية للمناخ.
+</p>
+
+</div>
+
+
+<div class="timeline">
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-content">
+
+<h3>
+مؤتمر شرم الشيخ
+</h3>
+
+<p>
+انعقد COP27 في شرم الشيخ خلال نوفمبر 2022.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-content">
+
+<h3>
+الخسائر والأضرار
+</h3>
+
+<p>
+شهد المؤتمر قرارًا بإنشاء ترتيبات تمويلية جديدة
+لمساعدة الدول النامية المتضررة من الخسائر والأضرار.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="timeline-item">
+
+<div class="timeline-dot"></div>
+
+<div class="timeline-content">
+
+<h3>
+استمرار العمل المناخي
+</h3>
+
+<p>
+استمر النقاش الدولي حول خفض الانبعاثات والتكيف
+والتمويل وتنفيذ الالتزامات المناخية.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     15 LOSS
+===================================================== -->
+
+<section
+class="page"
+id="page-loss"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+14 — قضية عالمية
+</div>
+
+<h2>
+الخسائر والأضرار
+</h2>
+
+<p>
+يشير المصطلح إلى الأضرار والخسائر المرتبطة بآثار
+التغير المناخي عندما لا يكون التكيف كافيًا لتجنبها.
+</p>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card">
+<div class="card-icon">🏚️</div>
+<h3>أضرار مادية</h3>
+<p>
+قد تشمل أضرارًا في البنية الأساسية والممتلكات
+والموارد الطبيعية.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🌾</div>
+<h3>خسائر اقتصادية</h3>
+<p>
+يمكن لبعض الأحداث المناخية أن تؤثر في الزراعة
+والأنشطة الاقتصادية.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">👥</div>
+<h3>المجتمعات</h3>
+<p>
+قد تكون بعض المجتمعات أكثر تعرضًا للمخاطر بسبب
+الموقع أو الموارد أو القدرة على التكيف.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     16 ADAPTATION
+===================================================== -->
+
+<section
+class="page"
+id="page-adaptation"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+15 — التكيف
+</div>
+
+<h2>
+كيف نتكيف مع تغير المناخ؟
+</h2>
+
+</div>
+
+
+<div class="image-grid">
+
+<div class="image-card">
+
+<img
+src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85"
+alt="ساحل"
+>
+
+<div class="image-caption">
+<h3>حماية السواحل</h3>
+<p>التخطيط للمخاطر الساحلية وحماية المناطق المعرضة.</p>
+</div>
+
+</div>
+
+
+<div class="image-card">
+
+<img
+src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1000&q=85"
+alt="زراعة"
+>
+
+<div class="image-caption">
+<h3>زراعة أكثر مرونة</h3>
+<p>تحسين أساليب الزراعة وإدارة المياه والموارد.</p>
+</div>
+
+</div>
+
+
+<div class="image-card">
+
+<img
+src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1000&q=85"
+alt="مدينة"
+>
+
+<div class="image-caption">
+<h3>مدن مرنة</h3>
+<p>تحسين التخطيط الحضري والبنية الأساسية.</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     17 SOLUTIONS
+===================================================== -->
+
+<section
+class="page"
+id="page-solutions"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+16 — الحلول
+</div>
+
+<h2>
+ماذا يمكننا أن نفعل؟
+</h2>
+
+</div>
+
+
+<div class="cards">
+
+<div class="solution">
+<h3>⚡ كفاءة الطاقة</h3>
+<p>
+تقليل استهلاك الطاقة غير الضروري واستخدام الأجهزة
+والأنظمة الأكثر كفاءة.
+</p>
+</div>
+
+<div class="solution">
+<h3>☀️ الطاقة النظيفة</h3>
+<p>
+دعم استخدام مصادر الطاقة المتجددة كلما كان ذلك
+مناسبًا.
+</p>
+</div>
+
+<div class="solution">
+<h3>🌳 حماية الطبيعة</h3>
+<p>
+حماية الغابات والمناطق الطبيعية ودعم استعادة النظم
+البيئية.
+</p>
+</div>
+
+<div class="solution">
+<h3>♻️ تقليل المخلفات</h3>
+<p>
+إعادة الاستخدام وإعادة التدوير وتحسين إدارة
+المخلفات.
+</p>
+</div>
+
+<div class="solution">
+<h3>🚲 نقل مستدام</h3>
+<p>
+دعم وسائل النقل العام والمشي والدراجات والحلول
+الأكثر كفاءة.
+</p>
+</div>
+
+<div class="solution">
+<h3>📚 التوعية</h3>
+<p>
+رفع الوعي العلمي والمناخي يساعد الأفراد والمؤسسات
+على اتخاذ قرارات أفضل.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     18 STATE
+===================================================== -->
+
+<section
+class="page"
+id="page-state"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+17 — المجتمع
+</div>
+
+<h2>
+دور الدولة
+</h2>
+
+</div>
+
+
+<div class="info-box">
+
+<div class="info-text">
+
+<h3>
+الاستجابة المناخية عمل متكامل
+</h3>
+
+<p>
+تحتاج مواجهة التغير المناخي إلى تعاون بين الحكومة
+والمؤسسات والقطاع الخاص والمجتمع المدني والمؤسسات
+التعليمية والأفراد.
+</p>
+
+<ul>
+
+<li>التخطيط طويل المدى.</li>
+
+<li>حماية الموارد الطبيعية.</li>
+
+<li>تطوير البنية الأساسية.</li>
+
+<li>دعم البحث العلمي.</li>
+
+<li>التوعية المجتمعية.</li>
+
+</ul>
+
+</div>
+
+<img
+src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=85"
+alt="تخطيط"
+>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     19 SCHOOL
+===================================================== -->
+
+<section
+class="page"
+id="page-school"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+18 — المدرسة
+</div>
+
+<h2>
+دور المدرسة
+</h2>
+
+<p>
+المدرسة يمكن أن تكون بيئة تعليمية عملية تساعد
+الطلاب على فهم المناخ وتحويل المعرفة إلى سلوك.
+</p>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card">
+<div class="card-icon">📚</div>
+<h3>التعليم</h3>
+<p>شرح المفاهيم المناخية بطريقة علمية مبسطة.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🌱</div>
+<h3>التشجير</h3>
+<p>تنفيذ أنشطة مدرسية مرتبطة بالمساحات الخضراء.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">♻️</div>
+<h3>إعادة التدوير</h3>
+<p>تنظيم أنشطة لتقليل المخلفات وتعزيز إعادة الاستخدام.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🔬</div>
+<h3>البحث العلمي</h3>
+<p>تشجيع الطلاب على تنفيذ مشروعات وأبحاث علمية.</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     20 STUDENT
+===================================================== -->
+
+<section
+class="page"
+id="page-student"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+19 — الطالب
+</div>
+
+<h2>
+ماذا يستطيع الطالب أن يفعل؟
+</h2>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card">
+<div class="card-icon">💡</div>
+<h3>تعلم</h3>
+<p>
+افهم الفرق بين الطقس والمناخ والاحترار العالمي
+والتغير المناخي.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">💧</div>
+<h3>وفّر المياه</h3>
+<p>
+تجنب الهدر وحافظ على الموارد في المنزل والمدرسة.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">💡</div>
+<h3>وفّر الطاقة</h3>
+<p>
+أطفئ الأجهزة والإضاءة غير المستخدمة.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">♻️</div>
+<h3>قلل المخلفات</h3>
+<p>
+استخدم الأشياء أكثر من مرة وافصل المخلفات عندما
+تتوفر إمكانية إعادة التدوير.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🌳</div>
+<h3>اهتم بالطبيعة</h3>
+<p>
+شارك في الأنشطة التي تحافظ على الأشجار والمساحات
+الخضراء.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">📢</div>
+<h3>انشر المعرفة</h3>
+<p>
+شارك المعلومات العلمية الصحيحة مع زملائك وأسرتك.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     21 QUICK
+===================================================== -->
+
+<section
+class="page"
+id="page-quick"
+>
+
+<div class="container">
+
+<div class="section-title">
+
+<div class="small">
+20 — اختبر معلوماتك
+</div>
+
+<h2>
+معلومات سريعة
+</h2>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card">
+<div class="card-icon">🌍</div>
+<h3>هل المناخ يتغير؟</h3>
+<p>
+نعم، المناخ يتغير طبيعيًا عبر التاريخ، لكن النشاط
+البشري أصبح عاملًا مهمًا في التغير المناخي الحديث.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🇪🇬</div>
+<h3>أين عقد COP27؟</h3>
+<p>
+في مدينة شرم الشيخ في مصر عام 2022.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🏛️</div>
+<h3>ما هو COP؟</h3>
+<p>
+هو مؤتمر الأطراف ضمن اتفاقية الأمم المتحدة الإطارية
+بشأن تغير المناخ.
+</p>
+</div>
+
+<div class="card">
+<div class="card-icon">🌡️</div>
+<h3>ما هو الاحترار العالمي؟</h3>
+<p>
+هو الارتفاع طويل المدى في متوسط درجة حرارة سطح
+الأرض نتيجة اختلال توازن الطاقة.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     22 CONCLUSION
+===================================================== -->
+
+<section
+class="page"
+id="page-conclusion"
+>
+
+<div class="container">
+
+<div class="hero">
+
+<div class="hero-content">
+
+<div class="badge">
+🌱 النهاية ليست النهاية
+</div>
+
+<h1>
+المستقبل
+<span>مسؤوليتنا</span>
+</h1>
+
+<p>
+فهم التغير المناخي لا يعني الخوف من المستقبل،
+بل يعني امتلاك المعرفة التي تساعدنا على بناء مستقبل
+أكثر قدرة على التكيف والاستدامة.
+</p>
+
+<div class="hero-buttons">
+
+<button
+class="btn btn-primary"
+onclick="goToPage('sources')"
+>
+المصادر الرسمية ↗
+</button>
+
+<button
+class="btn btn-secondary"
+onclick="goToPage('home')"
+>
+العودة للبداية
+</button>
+
+</div>
+
+</div>
+
+
+<div class="hero-visual">
+
+<img
+src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=85"
+alt="غابة"
+>
+
+<div class="hero-overlay">
+
+<div>
+
+<h3>
+احمِ ما يمكن حمايته
+</h3>
+
+<p>
+المعرفة بداية التغيير.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     23 EARTH / INTERACTIVE
+===================================================== -->
+
+<section
+class="page"
+id="page-sources"
+>
+
+<div class="container">
+
+<div class="sources-hero">
+
+<div class="badge">
+🌐 مصادر وروابط رسمية
+</div>
+
+<h1>
+المصادر الرسمية
+</h1>
+
+<p>
+روابط مباشرة لجهات ومؤسسات رسمية وعلمية مرتبطة
+بالتعليم والبيئة والمناخ ومؤتمر COP27.
+</p>
+
+</div>
+
+
+<div class="official-links">
+
+<a
+class="official-link"
+href="https://moe.gov.eg/"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="link-icon">
+🏫
+</div>
+
+<div class="link-content">
+
+<h3>
+وزارة التربية والتعليم والتعليم الفني
+</h3>
+
+<span>
+الموقع الرسمي لوزارة التربية والتعليم المصرية
+</span>
+
+</div>
+
+<div class="link-arrow">
+←
+</div>
+
+</a>
+
+
+<a
+class="official-link"
+href="https://www.eeaa.gov.eg/"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="link-icon">
+🌱
+</div>
+
+<div class="link-content">
+
+<h3>
+جهاز شؤون البيئة
+</h3>
+
+<span>
+الموقع الرسمي لجهاز شؤون البيئة في مصر
+</span>
+
+</div>
+
+<div class="link-arrow">
+←
+</div>
+
+</a>
+
+
+<a
+class="official-link"
+href="https://www.ema.gov.eg/"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="link-icon">
+🌦️
+</div>
+
+<div class="link-content">
+
+<h3>
+الهيئة العامة للأرصاد الجوية
+</h3>
+
+<span>
+الموقع الرسمي لخدمات الأرصاد الجوية المصرية
+</span>
+
+</div>
+
+<div class="link-arrow">
+←
+</div>
+
+</a>
+
+
+<a
+class="official-link"
+href="https://unfccc.int/cop27"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="link-icon">
+🌍
+</div>
+
+<div class="link-content">
+
+<h3>
+COP27 — UNFCCC
+</h3>
+
+<span>
+الصفحة الرسمية لمؤتمر شرم الشيخ للمناخ 2022
+</span>
+
+</div>
+
+<div class="link-arrow">
+←
+</div>
+
+</a>
+
+
+<a
+class="official-link"
+href="https://unfccc.int/"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="link-icon">
+♻️
+</div>
+
+<div class="link-content">
+
+<h3>
+UN Climate Change
+</h3>
+
+<span>
+اتفاقية الأمم المتحدة الإطارية بشأن تغير المناخ
+</span>
+
+</div>
+
+<div class="link-arrow">
+←
+</div>
+
+</a>
+
+
+<a
+class="official-link"
+href="https://www.unep.org/"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="link-icon">
+🌿
+</div>
+
+<div class="link-content">
+
+<h3>
+برنامج الأمم المتحدة للبيئة UNEP
+</h3>
+
+<span>
+الموقع الرسمي لبرنامج الأمم المتحدة للبيئة
+</span>
+
+</div>
+
+<div class="link-arrow">
+←
+</div>
+
+</a>
+
+
+<a
+class="official-link"
+href="https://wmo.int/"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="link-icon">
+☁️
+</div>
+
+<div class="link-content">
+
+<h3>
+المنظمة العالمية للأرصاد الجوية WMO
+</h3>
+
+<span>
+معلومات عالمية عن الطقس والمناخ والمياه
+</span>
+
+</div>
+
+<div class="link-arrow">
+←
+</div>
+
+</a>
+
+
+<a
+class="official-link"
+href="https://www.ipcc.ch/"
+target="_blank"
+rel="noopener noreferrer"
+>
+
+<div class="link-icon">
+📊
+</div>
+
+<div class="link-content">
+
+<h3>
+IPCC
+</h3>
+
+<span>
+الهيئة الحكومية الدولية المعنية بتغير المناخ
+</span>
+
+</div>
+
+<div class="link-arrow">
+←
+</div>
+
+</a>
+
+</div>
+
+
+<!-- =====================================================
+     INTERACTIVE EARTH
+===================================================== -->
+
+<div
+style="margin-top:55px"
+>
+
+<div class="section-title">
+
+<div class="small">
+تجربة تفاعلية
+</div>
+
+<h2>
+الأرض من منظور مختلف 🌍
+</h2>
+
+<p>
+اسحب الكرة باللمس أو بالماوس لتدويرها، واستخدم
+عجلة الماوس أو إصبعين للتكبير والتصغير.
+</p>
+
+</div>
+
+
+<div class="earth-section">
+
+<div id="earth-container">
+
+<div class="earth-help">
+اسحب الكرة ↔ لتدويرها
+</div>
+
+</div>
+
+
+<div class="earth-info">
+
+<h3>
+كوكب واحد
+</h3>
+
+<p>
+الغلاف الجوي والمحيطات واليابسة والأنظمة البيئية
+كلها مترابطة. لذلك فإن دراسة المناخ تحتاج إلى
+رؤية الصورة الكاملة وليس ظاهرة واحدة فقط.
+</p>
+
+<div class="cards" style="margin-top:20px">
+
+<div class="card" style="padding:18px">
+<div class="card-icon">🌊</div>
+<h3>المحيطات</h3>
+<p>تلعب دورًا أساسيًا في النظام المناخي.</p>
+</div>
+
+<div class="card" style="padding:18px">
+<div class="card-icon">🌳</div>
+<h3>اليابسة</h3>
+<p>تتفاعل مع الغلاف الجوي والمياه.</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- =====================================================
+     PAGE NAVIGATION
+===================================================== -->
+
+<div class="page-navigation">
+
+<button
+class="nav-arrow"
+id="prevPage"
+>
+→ الصفحة السابقة
+</button>
+
+<div class="page-counter">
+
+صفحة
+<span id="pageNumber">
+1
+</span>
+
+من
+
+<span id="totalPages">
+23
+</span>
+
+</div>
+
+<button
+class="nav-arrow"
+id="nextPage"
+>
+الصفحة التالية ←
+</button>
+
+</div>
+
+
+<!-- =====================================================
+     FLOATING NAV
+===================================================== -->
+
+<div class="floating-nav">
+
+<button
+class="float-arrow"
+id="floatPrev"
+aria-label="الصفحة السابقة"
+>
+❮
+</button>
+
+<button
+class="float-arrow"
+id="floatNext"
+aria-label="الصفحة التالية"
+>
+❯
+</button>
+
+</div>
+
+
+<button id="topBtn">
+↑
+</button>
 
 
 <!-- =====================================================
      FOOTER
 ===================================================== -->
+
 <footer>
 
-  <div class="container footer-grid">
+<div class="container">
 
-    <div>
-      <h3>التغيرات المناخية</h3>
-      <p>
-        منصة تعليمية للتعرف على قضية التغير المناخي،
-        ودور مصر ومؤتمر COP27 في شرم الشيخ.
-      </p>
-    </div>
+<div style="font-size:20px">
 
-    <div>
-      <h3>المحتوى</h3>
-      <a href="#concept">المفهوم</a>
-      <a href="#causes">الأسباب</a>
-      <a href="#effects">الآثار</a>
-      <a href="#solutions">الحلول</a>
-    </div>
+🌍 التغيرات المناخية
 
-    <div>
-      <h3>مصر وCOP27</h3>
-      <a href="#egypt">مصر والمناخ</a>
-      <a href="#cop27">مؤتمر COP27</a>
-      <a href="#results">المخرجات</a>
-      <a href="#student">دور الطالب</a>
-    </div>
+</div>
 
-  </div>
+<p>
 
-  <div class="container footer-bottom">
-    <span>
-      تصميم وإنشاء <strong>محمد السيد مختار</strong>
-    </span>
+مشروع تعليمي تفاعلي عن المناخ و COP27
 
-    <span>
-      © 2026
-    </span>
-  </div>
+</p>
+
+<p>
+
+تصميم وإنشاء
+<strong>
+محمد السيد مختار
+</strong>
+
+</p>
+
+</div>
 
 </footer>
 
 
-<button class="top" id="topBtn" aria-label="العودة للأعلى">
-  ↑
-</button>
-
-
 <script>
-/* =====================================================
-   JAVASCRIPT — خفيف جدًا
-===================================================== */
 
-const menuBtn = document.getElementById("menuBtn");
-const menu = document.getElementById("menu");
+/* =========================================================
+   PAGES
+========================================================= */
 
-menuBtn.addEventListener("click",function(){
-  menu.classList.toggle("open");
-});
+const pageNames = [
 
-document.querySelectorAll(".menu a").forEach(function(link){
-  link.addEventListener("click",function(){
-    menu.classList.remove("open");
+"home",
+"intro",
+"concept",
+"weather",
+"causes",
+"gases",
+"effects",
+"egypt",
+"efforts",
+"energy",
+"cop27",
+"sharm",
+"topics",
+"results",
+"loss",
+"adaptation",
+"solutions",
+"state",
+"school",
+"student",
+"quick",
+"conclusion",
+"sources"
 
-    document.querySelectorAll(".menu a").forEach(function(item){
-      item.classList.remove("active");
+];
+
+
+const pageTitles = [
+
+"الرئيسية",
+"المقدمة",
+"مفهوم التغير المناخي",
+"الطقس والمناخ",
+"أسباب التغير المناخي",
+"الغازات الدفيئة",
+"آثار التغير المناخي",
+"التغير المناخي في مصر",
+"جهود مصر",
+"الطاقة المتجددة",
+"COP27",
+"شرم الشيخ",
+"موضوعات COP27",
+"مخرجات COP27",
+"الخسائر والأضرار",
+"التكيف",
+"الحلول",
+"دور الدولة",
+"دور المدرسة",
+"دور الطالب",
+"معلومات سريعة",
+"الخاتمة",
+"المصادر الرسمية"
+
+];
+
+
+let currentIndex = 0;
+
+
+/* =========================================================
+   SHOW PAGE
+========================================================= */
+
+function showPage(index, updateHash=true){
+
+    if(index < 0){
+        index = 0;
+    }
+
+    if(index >= pageNames.length){
+        index = pageNames.length - 1;
+    }
+
+    currentIndex = index;
+
+
+    document
+    .querySelectorAll(".page")
+    .forEach(page=>{
+        page.classList.remove("active");
     });
 
-    this.classList.add("active");
-  });
-});
+
+    const currentPage =
+    document.getElementById(
+        "page-" + pageNames[index]
+    );
 
 
-const topBtn = document.getElementById("topBtn");
-
-window.addEventListener("scroll",function(){
-
-  if(window.scrollY > 500){
-    topBtn.classList.add("show");
-  }else{
-    topBtn.classList.remove("show");
-  }
-
-},{
-  passive:true
-});
+    if(currentPage){
+        currentPage.classList.add("active");
+    }
 
 
-topBtn.addEventListener("click",function(){
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-});
+    document
+    .querySelectorAll(".menu button")
+    .forEach(button=>{
 
+        button.classList.remove("active");
 
-/* تحديد القسم الحالي في القائمة */
-const sections = document.querySelectorAll("section[id]");
-const links = document.querySelectorAll(".menu a");
-
-const observer = new IntersectionObserver(function(entries){
-
-  entries.forEach(function(entry){
-
-    if(entry.isIntersecting){
-
-      links.forEach(function(link){
-        link.classList.remove("active");
-
-        if(link.getAttribute("href") === "#" + entry.target.id){
-          link.classList.add("active");
+        if(
+            button.dataset.page ===
+            pageNames[index]
+        ){
+            button.classList.add("active");
         }
-      });
+
+    });
+
+
+    document.getElementById(
+        "pageNumber"
+    ).textContent =
+    index + 1;
+
+
+    document.getElementById(
+        "totalPages"
+    ).textContent =
+    pageNames.length;
+
+
+    document.getElementById(
+        "prevPage"
+    ).disabled =
+    index === 0;
+
+
+    document.getElementById(
+        "nextPage"
+    ).disabled =
+    index === pageNames.length - 1;
+
+
+    document.title =
+    pageTitles[index] +
+    " | التغيرات المناخية";
+
+
+    if(updateHash){
+
+        history.replaceState(
+            null,
+            "",
+            "#" + pageNames[index]
+        );
 
     }
 
-  });
 
-},{
-  rootMargin:"-35% 0px -55% 0px"
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+
+    document
+    .getElementById("menu")
+    .classList.remove("open");
+
+
+    /* تحديث الرسوم عند ظهور الصفحة */
+
+    setTimeout(()=>{
+        animateBars();
+    },100);
+
+}
+
+
+/* =========================================================
+   GO TO PAGE
+========================================================= */
+
+function goToPage(name){
+
+    const index =
+    pageNames.indexOf(name);
+
+    if(index !== -1){
+        showPage(index);
+    }
+
+}
+
+
+/* =========================================================
+   PREVIOUS / NEXT
+========================================================= */
+
+function previousPage(){
+
+    showPage(
+        currentIndex - 1
+    );
+
+}
+
+
+function nextPage(){
+
+    showPage(
+        currentIndex + 1
+    );
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+.querySelectorAll(".menu button")
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        ()=>{
+            goToPage(
+                button.dataset.page
+            );
+        }
+    );
+
 });
 
-sections.forEach(function(section){
-  observer.observe(section);
-});
+
+document
+.getElementById("prevPage")
+.addEventListener(
+    "click",
+    previousPage
+);
+
+
+document
+.getElementById("nextPage")
+.addEventListener(
+    "click",
+    nextPage
+);
+
+
+document
+.getElementById("floatPrev")
+.addEventListener(
+    "click",
+    previousPage
+);
+
+
+document
+.getElementById("floatNext")
+.addEventListener(
+    "click",
+    nextPage
+);
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+document
+.getElementById("mobileMenu")
+.addEventListener(
+    "click",
+    ()=>{
+
+        document
+        .getElementById("menu")
+        .classList.toggle("open");
+
+    }
+);
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event=>{
+
+        if(
+            event.key === "ArrowRight"
+        ){
+            previousPage();
+        }
+
+        if(
+            event.key === "ArrowLeft"
+        ){
+            nextPage();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   HASH
+========================================================= */
+
+function loadHash(){
+
+    const hash =
+    location.hash
+    .replace("#","");
+
+    const index =
+    pageNames.indexOf(hash);
+
+    if(index >= 0){
+
+        showPage(
+            index,
+            false
+        );
+
+    }else{
+
+        showPage(
+            0,
+            false
+        );
+
+    }
+
+}
+
+
+window.addEventListener(
+    "load",
+    loadHash
+);
+
+
+/* =========================================================
+   TOP BUTTON
+========================================================= */
+
+const topBtn =
+document.getElementById(
+    "topBtn"
+);
+
+
+window.addEventListener(
+    "scroll",
+    ()=>{
+
+        if(
+            window.scrollY > 400
+        ){
+
+            topBtn.style.display =
+            "block";
+
+        }else{
+
+            topBtn.style.display =
+            "none";
+
+        }
+
+    }
+);
+
+
+topBtn.addEventListener(
+    "click",
+    ()=>{
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+);
+
+
+/* =========================================================
+   BAR ANIMATION
+========================================================= */
+
+function animateBars(){
+
+    document
+    .querySelectorAll(".bar-fill")
+    .forEach(bar=>{
+
+        const width =
+        bar.dataset.width;
+
+        if(width){
+            bar.style.width =
+            width + "%";
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   THREE.JS EARTH
+========================================================= */
+
+let earthStarted = false;
+
+
+function createEarth(){
+
+    if(earthStarted){
+        return;
+    }
+
+    const container =
+    document.getElementById(
+        "earth-container"
+    );
+
+    if(!container){
+        return;
+    }
+
+
+    earthStarted = true;
+
+
+    const scene =
+    new THREE.Scene();
+
+
+    const camera =
+    new THREE.PerspectiveCamera(
+        45,
+        container.clientWidth /
+        container.clientHeight,
+        0.1,
+        1000
+    );
+
+
+    camera.position.z =
+    3.2;
+
+
+    const renderer =
+    new THREE.WebGLRenderer({
+        antialias:true,
+        alpha:true
+    });
+
+
+    renderer.setPixelRatio(
+        Math.min(
+            window.devicePixelRatio,
+            2
+        )
+    );
+
+
+    renderer.setSize(
+        container.clientWidth,
+        container.clientHeight
+    );
+
+
+    container.appendChild(
+        renderer.domElement
+    );
+
+
+    /* الإضاءة */
+
+    const ambient =
+    new THREE.AmbientLight(
+        0xffffff,
+        1.2
+    );
+
+    scene.add(ambient);
+
+
+    const light =
+    new THREE.DirectionalLight(
+        0xffffff,
+        2
+    );
+
+    light.position.set(
+        5,
+        3,
+        5
+    );
+
+    scene.add(light);
+
+
+    /* الكرة */
+
+    const geometry =
+    new THREE.SphereGeometry(
+        1,
+        64,
+        64
+    );
+
+
+    const textureLoader =
+    new THREE.TextureLoader();
+
+
+    const earthTexture =
+    textureLoader.load(
+        "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+    );
+
+
+    const earthNormal =
+    textureLoader.load(
+        "https://threejs.org/examples/textures/planets/earth_normal_2048.jpg"
+    );
+
+
+    const earthMaterial =
+    new THREE.MeshPhongMaterial({
+
+        map:earthTexture,
+
+        normalMap:earthNormal,
+
+        shininess:8
+
+    });
+
+
+    const earth =
+    new THREE.Mesh(
+        geometry,
+        earthMaterial
+    );
+
+
+    scene.add(earth);
+
+
+    /* الغلاف الجوي */
+
+    const atmosphereGeometry =
+    new THREE.SphereGeometry(
+        1.04,
+        64,
+        64
+    );
+
+
+    const atmosphereMaterial =
+    new THREE.MeshBasicMaterial({
+
+        color:0x3ab8ff,
+
+        transparent:true,
+
+        opacity:.12,
+
+        side:THREE.BackSide
+
+    });
+
+
+    const atmosphere =
+    new THREE.Mesh(
+        atmosphereGeometry,
+        atmosphereMaterial
+    );
+
+
+    scene.add(atmosphere);
+
+
+    /* نجوم */
+
+    const starGeometry =
+    new THREE.BufferGeometry();
+
+
+    const starCount = 1200;
+
+    const positions =
+    new Float32Array(
+        starCount * 3
+    );
+
+
+    for(
+        let i=0;
+        i<starCount;
+        i++
+    ){
+
+        const radius =
+        7 + Math.random()*7;
+
+        const theta =
+        Math.random()*Math.PI*2;
+
+        const phi =
+        Math.acos(
+            2*Math.random()-1
+        );
+
+
+        positions[i*3] =
+        radius *
+        Math.sin(phi) *
+        Math.cos(theta);
+
+        positions[i*3+1] =
+        radius *
+        Math.sin(phi) *
+        Math.sin(theta);
+
+        positions[i*3+2] =
+        radius *
+        Math.cos(phi);
+
+    }
+
+
+    starGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(
+            positions,
+            3
+        )
+    );
+
+
+    const starMaterial =
+    new THREE.PointsMaterial({
+
+        color:0xffffff,
+
+        size:.025
+
+    });
+
+
+    const stars =
+    new THREE.Points(
+        starGeometry,
+        starMaterial
+    );
+
+
+    scene.add(stars);
+
+
+    /* تحكم */
+
+    let dragging = false;
+
+    let previousX = 0;
+    let previousY = 0;
+
+
+    container.addEventListener(
+        "pointerdown",
+        event=>{
+
+            dragging = true;
+
+            previousX =
+            event.clientX;
+
+            previousY =
+            event.clientY;
+
+        }
+    );
+
+
+    container.addEventListener(
+        "pointerup",
+        ()=>{
+            dragging = false;
+        }
+    );
+
+
+    container.addEventListener(
+        "pointerleave",
+        ()=>{
+            dragging = false;
+        }
+    );
+
+
+    container.addEventListener(
+        "pointermove",
+        event=>{
+
+            if(!dragging){
+                return;
+            }
+
+
+            const deltaX =
+            event.clientX -
+            previousX;
+
+
+            const deltaY =
+            event.clientY -
+            previousY;
+
+
+            earth.rotation.y +=
+            deltaX * .006;
+
+
+            earth.rotation.x +=
+            deltaY * .003;
+
+
+            previousX =
+            event.clientX;
+
+
+            previousY =
+            event.clientY;
+
+        }
+    );
+
+
+    container.addEventListener(
+        "wheel",
+        event=>{
+
+            event.preventDefault();
+
+            camera.position.z +=
+            event.deltaY * .002;
+
+            camera.position.z =
+            Math.max(
+                2,
+                Math.min(
+                    5,
+                    camera.position.z
+                )
+            );
+
+        },
+        {
+            passive:false
+        }
+    );
+
+
+    /* animation */
+
+    function animate(){
+
+        requestAnimationFrame(
+            animate
+        );
+
+
+        if(!dragging){
+
+            earth.rotation.y +=
+            .0008;
+
+        }
+
+
+        atmosphere.rotation.y =
+        earth.rotation.y;
+
+
+        renderer.render(
+            scene,
+            camera
+        );
+
+    }
+
+
+    animate();
+
+
+    window.addEventListener(
+        "resize",
+        ()=>{
+
+            const width =
+            container.clientWidth;
+
+            const height =
+            container.clientHeight;
+
+
+            camera.aspect =
+            width / height;
+
+
+            camera.updateProjectionMatrix();
+
+
+            renderer.setSize(
+                width,
+                height
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   START EARTH WHEN SOURCES PAGE OPENS
+========================================================= */
+
+const oldGoToPage =
+goToPage;
+
+
+goToPage = function(name){
+
+    oldGoToPage(name);
+
+    if(name === "sources"){
+
+        setTimeout(
+            createEarth,
+            250
+        );
+
+    }
+
+};
+
+
+/* =========================================================
+   START
+========================================================= */
+
+showPage(
+    0,
+    false
+);
+
 </script>
 
 </body>
