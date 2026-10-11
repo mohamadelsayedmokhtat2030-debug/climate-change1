@@ -81,7 +81,14 @@ body::after{
 
 .top-line{
  height:5px;
- background:linear-gradient(90deg,var(--gold),var(--gold2),var(--blue),var(--cyan),var(--gold));
+ background:linear-gradient(
+  90deg,
+  var(--gold),
+  var(--gold2),
+  var(--blue),
+  var(--cyan),
+  var(--gold)
+ );
 }
 
 .watermark{
@@ -547,6 +554,8 @@ body::after{
  margin-top:7px;
 }
 
+/* محتوى المقال */
+
 .article-content{
  margin-top:28px;
  background:#fff;
@@ -565,6 +574,128 @@ body::after{
 
 .article-content p:last-child{
  margin-bottom:0;
+}
+
+/* الصورة الرئيسية */
+
+.article-hero-image{
+ width:100%;
+ height:430px;
+ object-fit:cover;
+ display:block;
+ border-radius:25px;
+ margin:0 0 30px;
+ box-shadow:0 18px 45px rgba(8,41,77,.13);
+ border:1px solid #e4ebf1;
+ cursor:pointer;
+ transition:.35s ease;
+}
+
+.article-hero-image:hover{
+ transform:scale(1.01);
+}
+
+/* معرض الصور */
+
+.image-label{
+ display:inline-flex;
+ align-items:center;
+ gap:7px;
+ padding:8px 13px;
+ border-radius:999px;
+ background:#f7fbfd;
+ border:1px solid #dfebf2;
+ color:var(--blue);
+ font-size:12px;
+ font-weight:900;
+ margin:10px 0 15px;
+}
+
+.article-gallery{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:16px;
+ margin:15px 0 30px;
+}
+
+.article-gallery-item{
+ position:relative;
+ overflow:hidden;
+ border-radius:20px;
+ background:#f4f7f9;
+ border:1px solid var(--line);
+ cursor:pointer;
+ box-shadow:0 8px 25px rgba(8,41,77,.07);
+}
+
+.article-gallery-item img{
+ width:100%;
+ height:250px;
+ object-fit:cover;
+ display:block;
+ transition:.4s ease;
+}
+
+.article-gallery-item:hover img{
+ transform:scale(1.06);
+}
+
+.article-image-caption{
+ position:absolute;
+ right:0;
+ left:0;
+ bottom:0;
+ padding:35px 15px 12px;
+ color:#fff;
+ font-size:12px;
+ font-weight:800;
+ background:linear-gradient(
+  transparent,
+  rgba(8,41,77,.85)
+ );
+}
+
+/* تكبير الصور */
+
+.image-modal{
+ position:fixed;
+ inset:0;
+ z-index:9999;
+ background:rgba(8,20,35,.90);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:25px;
+ backdrop-filter:blur(8px);
+}
+
+.image-modal.active{
+ display:flex;
+}
+
+.image-modal img{
+ max-width:min(1100px,95vw);
+ max-height:88vh;
+ width:auto;
+ height:auto;
+ object-fit:contain;
+ border-radius:20px;
+ box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+
+.image-modal-close{
+ position:absolute;
+ top:20px;
+ left:20px;
+ width:48px;
+ height:48px;
+ border:0;
+ border-radius:50%;
+ background:#fff;
+ color:var(--navy);
+ font-size:24px;
+ font-weight:900;
+ cursor:pointer;
 }
 
 .tags{
@@ -672,6 +803,7 @@ body::after{
 /* RESPONSIVE */
 
 @media(max-width:900px){
+
  .cards{
   grid-template-columns:repeat(2,1fr);
  }
@@ -685,9 +817,11 @@ body::after{
   width:125px;
   height:125px;
  }
+
 }
 
 @media(max-width:620px){
+
  .container{
   padding:23px 13px 70px;
  }
@@ -772,6 +906,19 @@ body::after{
   line-height:2.1;
  }
 
+ .article-hero-image{
+  height:250px;
+  border-radius:18px;
+ }
+
+ .article-gallery{
+  grid-template-columns:1fr;
+ }
+
+ .article-gallery-item img{
+  height:230px;
+ }
+
  .article-nav{
   flex-direction:column;
  }
@@ -789,6 +936,24 @@ body::after{
   width:42px;
   height:42px;
  }
+
+ .image-modal{
+  padding:12px;
+ }
+
+ .image-modal img{
+  max-width:96vw;
+  max-height:80vh;
+  border-radius:14px;
+ }
+
+ .image-modal-close{
+  top:12px;
+  left:12px;
+  width:43px;
+  height:43px;
+ }
+
 }
 </style>
 </head>
@@ -802,25 +967,69 @@ body::after{
 </div>
 
 <header class="header">
+
  <div class="header-inner">
 
   <div class="header-brand">
-   <img src="logo-directorate.png" alt="مديرية التربية والتعليم بالسويس">
+
+   <img
+    src="logo-directorate.png"
+    alt="مديرية التربية والتعليم بالسويس"
+   >
+
    <div class="header-brand-text">
     التغيرات المناخية
     <small>مشروع تعليمي رقمي</small>
    </div>
+
   </div>
 
   <div class="header-logos">
-   <img src="logo-it.png" alt="تكنولوجيا المعلومات">
-   <img src="logo-ministry.png" alt="وزارة التربية والتعليم">
+
+   <img
+    src="logo-it.png"
+    alt="تكنولوجيا المعلومات"
+   >
+
+   <img
+    src="logo-ministry.png"
+    alt="وزارة التربية والتعليم"
+   >
+
   </div>
 
  </div>
+
 </header>
 
+
+<!-- نافذة تكبير الصور -->
+
+<div
+ class="image-modal"
+ id="imageModal"
+ onclick="handleModalClick(event)"
+>
+
+ <button
+  class="image-modal-close"
+  onclick="closeImageModal()"
+  aria-label="إغلاق الصورة"
+ >
+  ×
+ </button>
+
+ <img
+  id="modalImage"
+  src=""
+  alt="صورة مكبرة"
+ >
+
+</div>
+
+
 <main class="container">
+
 
 <!-- الصفحة الرئيسية -->
 
@@ -831,38 +1040,69 @@ body::after{
   <div class="hero-box">
 
    <div class="hero-logos">
-    <img class="hero-logo" src="logo-it.png" alt="شعار تكنولوجيا المعلومات بمحافظة السويس">
-    <img class="hero-logo" src="logo-directorate.png" alt="شعار مديرية التربية والتعليم بالسويس">
+
+    <img
+     class="hero-logo"
+     src="logo-it.png"
+     alt="شعار تكنولوجيا المعلومات بمحافظة السويس"
+    >
+
+    <img
+     class="hero-logo"
+     src="logo-directorate.png"
+     alt="شعار مديرية التربية والتعليم بالسويس"
+    >
+
    </div>
 
    <div class="badge">
+
     <span class="badge-dot"></span>
+
     مشروع تعليمي رقمي متكامل
+
    </div>
 
    <h1 class="hero-title">
+
     التغيرات <span>المناخية</span> 🌎
+
    </h1>
 
    <p class="hero-description">
+
     رحلة معرفية متكاملة للتعرف إلى التغيرات المناخية وأسبابها وآثارها،
-    وفهم علاقتها بمصر، ودور الدولة والمجتمع والطالب في بناء مستقبل أكثر وعيًا واستدامة.
+    وفهم علاقتها بمصر، ودور الدولة والمجتمع والطالب في بناء مستقبل أكثر
+    وعيًا واستدامة.
+
    </p>
 
    <div class="actions">
-    <button class="btn btn-primary" onclick="showView('sections')">
+
+    <button
+     class="btn btn-primary"
+     onclick="showView('sections')"
+    >
      ابدأ الآن ←
     </button>
 
-    <button class="btn btn-gold" onclick="showView('about')">
+    <button
+     class="btn btn-gold"
+     onclick="showView('about')"
+    >
      حول المنصة
     </button>
+
    </div>
 
    <div class="hero-info">
+
     <button onclick="showView('about')">
+
      معلومات الإنشاء والجهات المشرفة
+
     </button>
+
    </div>
 
   </div>
@@ -877,24 +1117,43 @@ body::after{
 <section id="sections" class="view">
 
  <div class="section-head">
-  <div class="kicker">المحتوى التعليمي</div>
-  <h2>أقسام المشروع</h2>
+
+  <div class="kicker">
+   المحتوى التعليمي
+  </div>
+
+  <h2>
+   أقسام المشروع
+  </h2>
+
   <p>
    اختر أي قسم لفتح صفحة مستقلة تحتوي على شرح منظم ومتكامل،
-   ويمكنك الانتقال بين الأقسام بسهولة من خلال أزرار السابق والتالي.
+   مدعوم بالصور التوضيحية، ويمكنك الانتقال بين الأقسام بسهولة.
   </p>
+
  </div>
 
- <div class="cards" id="cards"></div>
+ <div
+  class="cards"
+  id="cards"
+ ></div>
 
  <div class="actions">
-  <button class="btn btn-light" onclick="showView('home')">
+
+  <button
+   class="btn btn-light"
+   onclick="showView('home')"
+  >
    الرئيسية
   </button>
 
-  <button class="btn btn-gold" onclick="showView('about')">
+  <button
+   class="btn btn-gold"
+   onclick="showView('about')"
+  >
    حول المنصة
   </button>
+
  </div>
 
 </section>
@@ -905,11 +1164,19 @@ body::after{
 <section id="about" class="view">
 
  <div class="section-head">
-  <div class="kicker">هوية المشروع</div>
-  <h2>حول المنصة</h2>
+
+  <div class="kicker">
+   هوية المشروع
+  </div>
+
+  <h2>
+   حول المنصة
+  </h2>
+
   <p>
    التعريف بالمشروع والجهات التعليمية والمشرفين على إنشائه.
   </p>
+
  </div>
 
  <div class="about">
@@ -917,9 +1184,22 @@ body::after{
   <div class="about-box">
 
    <div class="about-logos">
-    <img src="logo-it.png" alt="تكنولوجيا المعلومات">
-    <img src="logo-directorate.png" alt="مديرية التربية والتعليم بالسويس">
-    <img src="logo-ministry.png" alt="وزارة التربية والتعليم">
+
+    <img
+     src="logo-it.png"
+     alt="تكنولوجيا المعلومات"
+    >
+
+    <img
+     src="logo-directorate.png"
+     alt="مديرية التربية والتعليم بالسويس"
+    >
+
+    <img
+     src="logo-ministry.png"
+     alt="وزارة التربية والتعليم"
+    >
+
    </div>
 
    <h2 class="about-title">
@@ -927,35 +1207,53 @@ body::after{
    </h2>
 
    <div class="official">
+
     جمهورية مصر العربية<br>
     وزارة التربية والتعليم والتعليم الفني<br>
     مديرية التربية والتعليم بمحافظة السويس<br>
     إدارة جنوب السويس التعليمية<br>
     مدرسة جمال عبد الناصر الثانوية بنين
+
    </div>
 
    <p class="about-text">
+
     مشروع تعليمي رقمي يهدف إلى تقديم محتوى معرفي منظم حول التغيرات
     المناخية، وتعزيز الوعي العلمي بالقضايا البيئية والمناخية، وربط
     المعرفة التعليمية بالقضايا التي تمس حاضر المجتمع ومستقبله.
     ويتناول المشروع المفاهيم الأساسية للمناخ، وأسباب التغيرات المناخية
     وآثارها، ودور مصر في مواجهة هذه التحديات، مع تسليط الضوء على
     مؤتمر الأطراف COP27 الذي استضافته مدينة شرم الشيخ عام 2022.
+
    </p>
 
    <div class="credit">
-    التصميم والإنشاء: <strong>الطالب محمد السيد مختار</strong><br>
-    تحت إشراف: <strong>ميس لبنى بهاء</strong>
+
+    التصميم والإنشاء:
+    <strong>الطالب محمد السيد مختار</strong>
+    <br>
+
+    تحت إشراف:
+    <strong>ميس لبنى بهاء</strong>
+
    </div>
 
    <div class="about-actions">
-    <button class="btn btn-primary" onclick="showView('sections')">
+
+    <button
+     class="btn btn-primary"
+     onclick="showView('sections')"
+    >
      استعراض الأقسام
     </button>
 
-    <button class="btn btn-light" onclick="showView('home')">
+    <button
+     class="btn btn-light"
+     onclick="showView('home')"
+    >
      الرئيسية
     </button>
+
    </div>
 
   </div>
@@ -965,29 +1263,46 @@ body::after{
 </section>
 
 
-<!-- صفحة المقال -->
+<!-- المقال -->
 
 <section id="article" class="view">
 
  <div class="article">
 
   <div class="article-top">
-   <button class="back-btn" onclick="showView('sections')">
+
+   <button
+    class="back-btn"
+    onclick="showView('sections')"
+   >
     ← الأقسام
    </button>
 
-   <span class="article-count" id="articleCount"></span>
+   <span
+    class="article-count"
+    id="articleCount"
+   ></span>
+
   </div>
 
-  <h1 class="article-title" id="articleTitle"></h1>
+  <h1
+   class="article-title"
+   id="articleTitle"
+  ></h1>
 
-  <div class="article-subtitle" id="articleSubtitle"></div>
+  <div
+   class="article-subtitle"
+   id="articleSubtitle"
+  ></div>
 
   <div class="article-content">
 
    <div id="articleText"></div>
 
-   <div class="tags" id="tags"></div>
+   <div
+    class="tags"
+    id="tags"
+   ></div>
 
   </div>
 
@@ -995,11 +1310,17 @@ body::after{
 
   <div class="article-nav">
 
-   <button class="btn btn-light" id="previousBtn">
+   <button
+    class="btn btn-light"
+    id="previousBtn"
+   >
     → السابق
    </button>
 
-   <button class="btn btn-primary" id="nextBtn">
+   <button
+    class="btn btn-primary"
+    id="nextBtn"
+   >
     التالي ←
    </button>
 
@@ -1012,13 +1333,23 @@ body::after{
 </main>
 
 
+<!-- أزرار عائمة -->
+
 <div class="floating">
 
- <button class="float-btn" title="الرئيسية" onclick="showView('home')">
+ <button
+  class="float-btn"
+  title="الرئيسية"
+  onclick="showView('home')"
+ >
   ⌂
  </button>
 
- <button class="float-btn" title="الأقسام" onclick="showView('sections')">
+ <button
+  class="float-btn"
+  title="الأقسام"
+  onclick="showView('sections')"
+ >
   ☷
  </button>
 
@@ -1026,16 +1357,23 @@ body::after{
 
 
 <footer class="footer">
- مشروع «التغيرات المناخية» 🌎<br>
- التصميم والإنشاء: الطالب محمد السيد مختار — تحت إشراف ميس لبنى بهاء
+
+ مشروع «التغيرات المناخية» 🌎
+ <br>
+  
+  انشاء 
+ الطالب انطونيوس بسيلي فضل بسيلي
+ —
+ تحت إشراف ميس لبنى بهاء الدين
+
 </footer>
 
 
 <script>
 
-/* =========================
+/* =========================================================
    محتوى الأقسام الـ23
-========================= */
+========================================================= */
 
 const pages = [
 
@@ -1320,9 +1658,9 @@ tags:["مصدر رسمي","تحقق","بحث أعمق"]
 ];
 
 
-/* =========================
+/* =========================================================
    المصادر الرسمية
-========================= */
+========================================================= */
 
 const officialSources=[
 
@@ -1377,9 +1715,202 @@ const officialSources=[
 ];
 
 
-/* =========================
+/* =========================================================
+   صور الأقسام الـ23
+========================================================= */
+
+const pageImages=[
+
+{
+hero:"https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1569511166187-97eb6e3878f2?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1549885606-bbc17accf949?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1473260079709-83c808703435?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1564399579883-451a5d44ec08?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1549885606-bbc17accf949?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=85"
+]
+},
+
+{
+hero:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=85",
+gallery:[
+"https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=900&q=85",
+"https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=900&q=85"
+]
+}
+
+];
+
+
+/* =========================================================
    إنشاء البطاقات
-========================= */
+========================================================= */
 
 const cards=document.getElementById("cards");
 
@@ -1408,9 +1939,10 @@ cards.innerHTML=pages.map((page,index)=>`
 `).join("");
 
 
-/* =========================
-   التنقل
-========================= */
+
+/* =========================================================
+   إخفاء الصفحات
+========================================================= */
 
 function hideViews(){
 
@@ -1426,6 +1958,10 @@ function hideViews(){
 }
 
 
+/* =========================================================
+   عرض صفحة
+========================================================= */
+
 function showView(id){
 
  hideViews();
@@ -1436,40 +1972,129 @@ function showView(id){
   element.classList.add("active");
  }
 
- history.replaceState(null,"","#"+id);
+ history.replaceState(
+  null,
+  "",
+  "#"+id
+ );
 
 }
 
 
-/* =========================
+/* =========================================================
    فتح القسم
-========================= */
+========================================================= */
 
 function openArticle(index){
 
  const page=pages[index];
 
+ const images=pageImages[index] || {
+  hero:"",
+  gallery:[]
+ };
+
+
  document.getElementById("articleCount").textContent=
  "القسم "+page.num+" من 23";
 
+
  document.getElementById("articleTitle").textContent=
  page.title;
+
 
  document.getElementById("articleSubtitle").textContent=
  page.subtitle;
 
 
- document.getElementById("articleText").innerHTML=
- page.content.map(text=>`<p>${text}</p>`).join("");
+ /* الصورة الرئيسية */
 
+ const heroImage=images.hero
+ ? `
+  <img
+   class="article-hero-image"
+   src="${images.hero}"
+   loading="lazy"
+   alt="${page.title}"
+   onclick="openImageModal(this.src)"
+  >
+ `
+ : "";
+
+
+ /* صور المعرض */
+
+ const galleryImages=(images.gallery || [])
+ .map((src,i)=>`
+
+  <div
+   class="article-gallery-item"
+   onclick="openImageModal('${src}')"
+  >
+
+   <img
+    src="${src}"
+    loading="lazy"
+    alt="${page.title} - صورة ${i+1}"
+   >
+
+   <div class="article-image-caption">
+    🖼️ صورة توضيحية — ${page.title}
+   </div>
+
+  </div>
+
+ `)
+ .join("");
+
+
+ const galleryHTML=galleryImages
+ ? `
+
+  <div class="image-label">
+   🖼️ صور مرتبطة بالقسم
+  </div>
+
+  <div class="article-gallery">
+   ${galleryImages}
+  </div>
+
+ `
+ : "";
+
+
+ /* محتوى القسم */
+
+ document.getElementById("articleText").innerHTML=`
+
+  ${heroImage}
+
+  ${page.content
+   .map(text=>`<p>${text}</p>`)
+   .join("")
+  }
+
+  ${galleryHTML}
+
+ `;
+
+
+ /* الكلمات المفتاحية */
 
  document.getElementById("tags").innerHTML=
  page.tags.map(tag=>`
-  <span class="tag">${tag}</span>
+
+  <span class="tag">
+   ${tag}
+  </span>
+
  `).join("");
 
 
+ /* المصادر */
+
  const sourceArea=document.getElementById("sourceArea");
+
 
  if(index===22){
 
@@ -1487,9 +2112,17 @@ function openArticle(index){
      >
 
       <div>
-       <strong>${source[0]}</strong>
+
+       <strong>
+        ${source[0]}
+       </strong>
+
        <br>
-       <small>${source[1]}</small>
+
+       <small>
+        ${source[1]}
+       </small>
+
       </div>
 
       <b>↗</b>
@@ -1509,17 +2142,25 @@ function openArticle(index){
  }
 
 
+ /* السابق */
+
  document.getElementById("previousBtn").onclick=()=>{
+
   openArticle(
    (index-1+pages.length)%pages.length
   );
+
  };
 
 
+ /* التالي */
+
  document.getElementById("nextBtn").onclick=()=>{
+
   openArticle(
    (index+1)%pages.length
   );
+
  };
 
 
@@ -1527,18 +2168,81 @@ function openArticle(index){
 
  document.getElementById("article").classList.add("active");
 
+
  history.replaceState(
   null,
   "",
   "#article-"+(index+1)
  );
 
+
+ window.scrollTo({
+  top:0,
+  behavior:"smooth"
+ );
+
 }
 
 
-/* =========================
+/* =========================================================
+   تكبير الصورة
+========================================================= */
+
+function openImageModal(src){
+
+ const modal=document.getElementById("imageModal");
+
+ const image=document.getElementById("modalImage");
+
+ image.src=src;
+
+ modal.classList.add("active");
+
+ document.body.style.overflow="hidden";
+
+}
+
+
+function closeImageModal(){
+
+ const modal=document.getElementById("imageModal");
+
+ modal.classList.remove("active");
+
+ document.body.style.overflow="";
+
+}
+
+
+/* الضغط خارج الصورة */
+
+function handleModalClick(event){
+
+ if(event.target.id==="imageModal"){
+
+  closeImageModal();
+
+ }
+
+}
+
+
+/* زر Escape */
+
+document.addEventListener("keydown",event=>{
+
+ if(event.key==="Escape"){
+
+  closeImageModal();
+
+ }
+
+});
+
+
+/* =========================================================
    الروابط المباشرة
-========================= */
+========================================================= */
 
 function route(){
 
@@ -1546,20 +2250,33 @@ function route(){
   location.hash || "#home"
  );
 
+
  if(hash==="#" || hash==="#home"){
+
   showView("home");
+
   return;
+
  }
+
 
  if(hash==="#sections"){
+
   showView("sections");
+
   return;
+
  }
 
+
  if(hash==="#about"){
+
   showView("about");
+
   return;
+
  }
+
 
  if(hash.startsWith("#article-")){
 
@@ -1568,51 +2285,75 @@ function route(){
    10
   );
 
+
   if(
    number>=1 &&
    number<=pages.length
   ){
 
    openArticle(number-1);
+
    return;
 
   }
 
  }
 
+
  showView("home");
 
 }
 
-window.addEventListener("hashchange",route);
 
-window.addEventListener("popstate",route);
+/* =========================================================
+   أحداث المتصفح
+========================================================= */
+
+window.addEventListener(
+ "hashchange",
+ route
+);
+
+window.addEventListener(
+ "popstate",
+ route
+);
 
 
-/* =========================
+/* =========================================================
    أسهم الكيبورد
-========================= */
+========================================================= */
 
 document.addEventListener("keydown",event=>{
 
  if(
-  !document.getElementById("article")
-   .classList.contains("active")
+  !document
+   .getElementById("article")
+   .classList
+   .contains("active")
  ){
+
   return;
+
  }
+
 
  const hash=location.hash;
 
+
  if(!hash.startsWith("#article-")){
+
   return;
+
  }
+
 
  const current=
   parseInt(
    hash.replace("#article-",""),
    10
   )-1;
+
 
  if(event.key==="ArrowLeft"){
 
@@ -1621,6 +2362,7 @@ document.addEventListener("keydown",event=>{
   );
 
  }
+
 
  if(event.key==="ArrowRight"){
 
@@ -1632,6 +2374,10 @@ document.addEventListener("keydown",event=>{
 
 });
 
+
+/* =========================================================
+   تشغيل الصفحة
+========================================================= */
 
 route();
 
